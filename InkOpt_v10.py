@@ -65,6 +65,7 @@ ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(me
 log.addHandler(ch)
 log.info("Begin log")
 
+
 def inputf(dict, key, prompt):
 	"""
 	Helper function to handle interactive parameter acquisition
@@ -72,12 +73,13 @@ def inputf(dict, key, prompt):
 	while(True):
 		try:
 			inpstr = input("{}: ".format(prompt))
-			dict[key] = [np.float64(x) for x in [inpstr.split(" ")]][0]
+			dict[key] = [np.float64(x) for x in [inpstr.split(" ")]][0] # This looks stupid...
 			break
 		except:
 			print("Bad input to {}".format(key))
 	log.debug("Stored {} to {}".format(inpstr, key))
-			
+
+	
 class InkOpt():
 	"""
 	Reads and processes material info and ink formulation parameters to generate
@@ -166,7 +168,7 @@ class InkOpt():
 			log.debug("Read from {}:\n{}".format(fileInput, inputs))
 			for index, key in enumerate(keys): # Iterate over keys
 				try:
-					log.debug("Storing {} in {}".format(inputs[index], key))
+					log.debug("Storing {} in {}".format(inputs[index][:-1], key))
 					params[key] = np.float64(inputs[index].split(" ")) # Cast input to float
 				except Exception as e: # Handle bad data
 					log.error("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
