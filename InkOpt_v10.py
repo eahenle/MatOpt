@@ -52,16 +52,18 @@ DOPSTEP = 4 # Number of points to sample in dopant percentage ranges
 	Don't increase sampling density unless you have all day to run permutations.
 """
 
-# Set logging level (ERROR for stable versions, INFO for working versions)
-LOGLEVEL = logging.NOTSET
+# Set logging level (ERROR for stable versions, DEBUG for working versions)
 if(VERSION % 1 == 0):
 	LOGLEVEL = logging.ERROR
 else:
-	LOGLEVEL = logging.INFO
-LOG = logging.getLogger(__name__)
-LOG.setLevel(LOGLEVEL)
-LOG.info("Begin log")
-
+	LOGLEVEL = logging.DEBUG
+log = logging.getLogger(__name__)
+log.setLevel(LOGLEVEL)
+ch = logging.StreamHandler()
+ch.setLevel(LOGLEVEL)
+ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+log.addHandler(ch)
+log.info("Begin log")
 
 def inputf(dict, key, prompt):
 	"""
@@ -70,11 +72,11 @@ def inputf(dict, key, prompt):
 	while(True):
 		try:
 			inpstr = input("{}: ".format(prompt))
-			dict[key] = [np.float64(x) for x in [inpstr.split(" ")]]
+			dict[key] = [np.float64(x) for x in [inpstr.split(" ")]][0]
 			break
 		except:
 			print("Bad input to {}".format(key))
-
+	log.debug("Stored {} to {}".format(inpstr, key))
 			
 class InkOpt():
 	"""
@@ -88,18 +90,21 @@ class InkOpt():
 		"""
 		self.output = []
 		self.outputfile = "output_{}.csv".format(time.time())
+		log.debug("InkOpt object initialized with output target {}".format(self.outputfile))
 	
 	def getData(self, input):
 		"""
 		Creates input data frame from file
 		"""
 		self.data = pd.read_csv(input)
+		log.debug("Read input from {}:\n{}".format(input, self.data))
 		
 	def writeOutput(self):
 		"""
 		Writes the output file as CSV
 		"""
 		self.output.to_csv(self.outputfile)
+		log.debug("Wrote output to {}".format(self.outputfile))
 
 	def setParams(self, fileInput = None):
 		"""
@@ -131,6 +136,7 @@ class InkOpt():
 		keys = [*params] # Unpack keys
 		
 		if(fileInput == None): # Interactive parameter acquisition
+			log.debug("Starting interactive parameter acquisition.")
 			prompts = [ # List of parameter prompts
 				"Enter max difference between Pd,f_hi and Pd,f_lo",
 				"Enter the max P(delta)d,f",
@@ -152,17 +158,22 @@ class InkOpt():
 				"Enter the maximum percentage of dopant 4"
 			]
 			for index, key in enumerate(keys):
+				log.debug("Getting input for {}".format(key))
 				inputf(params, key, prompts[index]) # Print prompt, store input
 		else: # Parameter inputs from file. Line order must match the params dictionary
+			log.debug("Starting file parameter acquisition.")
 			inputs = open(fileInput).readlines() # Read file into list of lines
+			log.debug("Read from {}:\n{}".format(fileInput, inputs))
 			for index, key in enumerate(keys): # Iterate over keys
 				try:
+					log.debug("Storing {} in {}".format(inputs[index], key))
 					params[key] = np.float64(inputs[index].split(" ")) # Cast input to float
 				except Exception as e: # Handle bad data
-					print("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
+					log.error("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
 					quit()
-			
+
 		self.params = params # Store parameters
+		log.debug("Parameters stored:\n{}".format(self.params))
 		return self.params
 		
 	def getParams(self):
@@ -170,8 +181,10 @@ class InkOpt():
 		
 	def validateParams(self):
 	
+		log.debug("Starting parameter validation.")
+	
 		def fail():
-			print("Input validation failed.")
+			log.error("Input validation failed.")
 			quit()
 	
 		# All parameters must be >= 0
