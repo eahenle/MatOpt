@@ -42,7 +42,7 @@ import pyfiglet
 import logging
 
 
-VERSION = 10.02 # Version number ## Consider scraping from filename?
+VERSION = 10.03 # Version number ## Consider scraping from filename?
 INPUTFILE = "material_table.csv" # Default input file for material properties
 MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite
 DOPSTEP = 4 # Number of points to sample in dopant percentage ranges
@@ -59,10 +59,10 @@ else:
 	LOGLEVEL = logging.DEBUG
 log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
-ch = logging.StreamHandler()
-ch.setLevel(LOGLEVEL)
-ch.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-log.addHandler(ch)
+loghandle = logging.StreamHandler()
+loghandle.setLevel(LOGLEVEL)
+loghandle.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+log.addHandler(loghandle)
 log.info("Begin log")
 
 
@@ -80,6 +80,24 @@ def inputf(dict, key, prompt):
 	log.debug("Stored {} to {}".format(inpstr, key))
 
 	
+def iflat(iterable):
+	"""
+	Helper function to flatten an interable object.
+	"""
+	log.debug("iflat({})".format(iterable))
+	for element in iter(iterable):
+		log.debug("element: {}".format(element))
+		if isinstance(element, (list, tuple)):
+			log.debug("element is list or tuple")
+			for subelement in iflat(element):
+				log.debug("yielding {} to subelement generator".format(subelement))
+				yield subelement
+		else:
+			log.debug("yielding {} to element generator".format(element))
+			yield element
+	log.debug("RET iflat({})".format(iterable))
+	
+	
 class InkOpt():
 	"""
 	Reads and processes material info and ink formulation parameters to generate
@@ -92,21 +110,21 @@ class InkOpt():
 		"""
 		self.output = []
 		self.outputfile = "output_{}.csv".format(time.time())
-		log.debug("InkOpt object initialized with output target {}".format(self.outputfile))
+		log.info("InkOpt object initialized with output target {}".format(self.outputfile))
 	
 	def getData(self, input):
 		"""
 		Creates input data frame from file
 		"""
 		self.data = pd.read_csv(input)
-		log.debug("Read input from {}:\n{}".format(input, self.data))
+		log.info("Read input from {}:\n{}".format(input, self.data))
 		
 	def writeOutput(self):
 		"""
 		Writes the output file as CSV
 		"""
 		self.output.to_csv(self.outputfile)
-		log.debug("Wrote output to {}".format(self.outputfile))
+		log.info("Wrote output to {}".format(self.outputfile))
 
 	def setParams(self, fileInput = None):
 		"""
@@ -160,10 +178,10 @@ class InkOpt():
 				"Enter the maximum percentage of dopant 4"
 			]
 			for index, key in enumerate(keys):
-				log.debug("Getting input for {}".format(key))
+				log.info("Getting input for {}".format(key))
 				inputf(params, key, prompts[index]) # Print prompt, store input
 		else: # Parameter inputs from file. Line order must match the params dictionary
-			log.debug("Starting file parameter acquisition.")
+			log.info("Starting file parameter acquisition.")
 			inputs = open(fileInput).readlines() # Read file into list of lines
 			log.debug("Read from {}:\n{}".format(fileInput, inputs))
 			for index, key in enumerate(keys): # Iterate over keys
@@ -178,28 +196,46 @@ class InkOpt():
 		log.debug("Parameters stored:\n{}".format(self.params))
 		return self.params
 		
-	def getParams(self):
+	def getParams(self): # Superfluous, but whatever.
+		"""
+		Return the params object of InkOpt's input parameters as a dict.
+		"""
 		return self.params
 		
 	def validateParams(self):
+		"""
+		Checks input parameters
+		"""
 	
-		log.debug("Starting parameter validation.")
+		log.info("Starting parameter validation.")
 	
 		def fail():
 			log.error("Input validation failed.")
 			quit()
 	
 		# All parameters must be >= 0
-		try:
-			bools = [self.params[x][0] >= 0 for i, x in enumerate(self.params)]
-		except:
-			pass
-		try:
-			bools = [item for sublist in bools for item in sublist]
-		except:
-			pass
-		if(sum([1 if x==False else 0 for x in bools]) != 0):
-			fail()
+		log.info("Checking for negative value inputs.")
+		params = self.params.values()
+		log.info("Parameters: {}".format(params))
+		nums = iflat(params)
+		log.info("Flattened inputs:\n{}".format(nums))
+		for num in nums:
+			log.debug(num)
+			try:
+				if num < 0:
+					log.error("Negative value input!")
+					fail()
+			except ValueError:
+				try:
+					for nuum in num:
+						if nuum < 0:
+							log.error("Negative value input!")
+							fail()
+				except: # Why did this take so much effort??
+					raise
+			except Exception as e:
+				log.error(e)
+				fail()
 			
 		# "min" values must be < "max" values
 		## IMPLEMENT

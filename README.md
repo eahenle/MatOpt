@@ -100,4 +100,3 @@ ERROR CASE
 ERROR CASE
 	Cannot interrupt with Ctrl+C.
 	Possible fix: SIG handler
-	
