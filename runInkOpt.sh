@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# BASH script to run InkOpt
+# Adrian Henle
+# Voxtel, Inc.
+#
+# This version is intended for development purposes.
+
 # Input parameter file for InkOpt
 INPUT="input.txt"
 

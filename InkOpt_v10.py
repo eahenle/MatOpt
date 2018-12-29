@@ -1,17 +1,10 @@
 #!/usr/bin/env python
 """
-InkOpt_v10-02.py
+InkOpt version 10
 
 Written by Adrian Henle, based on InkOpt_lite_inter_v7.py
 
 CONFIDENTIAL PROPERTY OF VOXTEL, INC.
-
-************************ A program to generate ink formulations. ************************
-
-Each formulation is based on inputs of two lists of matrices and two lists of dopants.  Potential
-formulations are probed for calculated parameters relevant to GRIN optics, and material
-combinations with acceptable values are returned to the user in CSV format for viewing in
-spreadsheet software.
 
 Input specifications:
 	Matrix1:		a list of matrix materials from the data table
@@ -38,22 +31,6 @@ as space-delimited lists on a single line.  Non-numeric inputs are rejected.
 	
 Dopant percentages are permuted with a density of DOPSTEP samples in each range.  I.e., each step
 iterates the tested percentage by (Max - Min)/DOPSTEP
-
-Future versions may include:
-	GUI
-	Generation of massive SQL databases (minimal end-user compute time for finding
-		good formulations with complex requirements)
-	Training and application of predictive modeling for ultra-fast screening
-	
-Changelog:
-	v10-02
-		Added logging
-		
-	v10-01
-		Added pyfiglet for program ASCII splash
-		
-	v10-00
-		Start of this revision.
 """
 
 
@@ -274,9 +251,7 @@ class InkOpt():
 												# Calulate Dn for each wavelength and check average against constraints minDnAvg and MINMATPCT
 												Dn = calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct, dopant3, d3pct, dopant4, d4pct)
 												if((Dn["486"] + Dn["587"] + Dn["656"])/3 < self.params["minDnAvg"][0]):
-													#continue
-													pass
-												#print([ matrix1, matrix2, dopant1, dopant2, dopant3, dopant4, d1pct, d2pct, d3pct, d4pct ])	
+													continue
 												self.output.append([
 													self.data.iloc[matrix1.astype(int)][0],
 													self.data.iloc[matrix2.astype(int)][0],
