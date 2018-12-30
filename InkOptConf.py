@@ -9,10 +9,10 @@ Configurations and settings values for InkOpt and InkOptHelpers
 import logging
 
 # Constants
-VERSION = 10.07 # Version number
+VERSION = 10.08 # Version number
 INPUTFILE = "material_table.csv" # Default input file for material properties
 MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite
-DOPSTEP = 5 # Number of points to sample in dopant percentage ranges
+DOPSTEP = 6 # Number of points to sample in dopant percentage ranges
 """
 	### WARNING! ###
 	Complexity for v7 algorithm is O(k^DOPSTEP).

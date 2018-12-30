@@ -26,13 +26,18 @@ def inputf(dict, key, prompt):
 	"""
 	Helper function to handle interactive parameter acquisition
 	"""
-	while(True):
+	inpstr = ""
+	while(inpstr == ""):
 		try:
 			inpstr = input("{}: ".format(prompt))
 			dict[key] = [np.float64(x) for x in [inpstr.split(" ")]][0] # This looks stupid...
 			break
+		except KeyboardInterrupt:
+			log.error("Ctrl+C quit")
+			quit()
 		except:
 			print("Bad input to {}".format(key))
+			inpstr = ""
 	log.debug("Stored {} to {}".format(inpstr, key))
 
 	

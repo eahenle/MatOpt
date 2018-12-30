@@ -33,9 +33,11 @@ Dopant percentages are permuted with a density of DOPSTEP samples in each range.
 iterates the tested percentage by (Max - Min)/DOPSTEP
 """
 
+
 import sys
 import pyfiglet
 import logging
+import signal
 from InkOpt import *
 from InkOptConf import *
 

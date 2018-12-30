@@ -42,56 +42,27 @@ Future versions may include:
 	Generation of massive SQL databases (minimal end-user compute time for finding
 		good formulations with complex requirements)
 	Training and application of predictive modeling for ultra-fast screening
-
-
-
-	
-Relevant math:	
-	
-	Dn486 = (n1_486*Pct1+n2_486*Pct2+np1_486*(1-Pct1-Pct2))-(n3_486*Pct3+n4_486*Pct4+np2_486*(1-Pct3-Pct4))
-	Dn587 = (n1_587*Pct1+n2_587*Pct2+np1_587*(1-Pct1-Pct2))-(n3_587*Pct3+n4_587*Pct4+np2_587*(1-Pct3-Pct4))                                 
-	Dn656 = (n1_656*Pct1+n2_656*Pct2+np1_656*(1-Pct1-Pct2))-(n3_656*Pct3+n4_656*Pct4+np2_656*(1-Pct3-Pct4))
-	Dnavg = (Dn486 + Dn587 + Dn656)/3
-
-	Pdf_hi = ((n1_587*Pct1+n2_587*Pct2+np1_587*(1-Pct1-Pct2))-(n1_486*Pct1+n2_486*Pct2+np1_486*(1-Pct1-Pct2)))/((n1_656*Pct1+n2_656*Pct2+np1_656*(1-Pct1-Pct2))-(n1_486*Pct1+n2_486*Pct2+np1_486*(1-Pct1-Pct2)))
-
-	Pdf_lo = ((n3_587*Pct3+n4_587*Pct4+np2_587*(1-Pct3-Pct4))-(n3_486*Pct3+n4_486*Pct4+np2_486*(1-Pct3-Pct4)))/((n3_656*Pct3+n4_656*Pct4+np2_656*(1-Pct3-Pct4))-(n3_486*Pct3+n4_486*Pct4+np2_486*(1- Pct3- Pct4)))                                  
-
-	if Dn656 == Dn486:
-		PDf = 1e10
-	else:
-		PDf = (Dn587-Dn486)/(Dn656 - Dn486)
-	
-	if Dn486 == Dn656:
-		Vgrin = 1e10
-	else: 
-		Vgrin = Dn587/(Dn486 - Dn656)
-
-
-
-
-
-
-IMPLEMENT
-	MINMATPCT enforcement
-
-
-
-
-VALIDATION:
-	Make dopant/co-dopant lists disjoint sets
-	
-	
-	
-ERROR CASE
-	Empty string for co-dopants.  There is no way to leave this input blank, which may be
+	Handling of empty string for co-dopants.  There is no way to leave this input blank, which may be
 	inappropriate for some use cases.
-	Possible fix: specify format for empty input.
+	Parallelization
+	Execution time estimation
 	
-ERROR CASE
-	Cannot interrupt with Ctrl+C.
-	Possible fix: SIG handler
 	
-ERROR CASE
-	Can give invalid inputs for material rows (0 is the header row index)
-	Possible fix: check > 0 instead of >= 0?
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	

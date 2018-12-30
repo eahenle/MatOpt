@@ -106,7 +106,7 @@ class InkOpt():
 			]
 			for index, key in enumerate(keys):
 				self.log.info("Getting input for {}".format(key))
-				InkOptHelpers.inputf(params, key, prompts[index]) # Print prompt, store input
+				inputf(params, key, prompts[index]) # Print prompt, store input
 		else: # Parameter inputs from file. Line order must match the params dictionary
 			self.log.info("Starting file parameter acquisition.")
 			inputs = open(fileInput).readlines() # Read file into list of lines
@@ -133,7 +133,6 @@ class InkOpt():
 		"""
 		Checks input parameters
 		"""
-	
 		self.log.info("Starting parameter validation.")
 	
 		def fail():
@@ -190,8 +189,14 @@ class InkOpt():
 			for matrix2 in self.params["matrix2"]:
 				for dopant1 in self.params["dopant1"]:
 					for dopant2 in self.params["dopant2"]:
+						if dopant1 == dopant2:
+							log.debug("Skipping redundant combinations")
+							continue
 						for dopant3 in self.params["dopant3"]:
 							for dopant4 in self.params["dopant4"]:
+								if dopant3 == dopant4:
+									log.debug("Skipping redundant combinations")
+									continue
 								for d1pct in np.linspace(self.params["d1min"][0], self.params["d1max"][0], num = DOPSTEP):
 									if 100 - d1pct < MINMATPCT:
 										self.log.debug("Skipping bad permutations...")
@@ -246,6 +251,7 @@ class InkOpt():
 													continue
 												self.log.debug("Vgrin OK")
 												
+												# Append successful permutation to output
 												self.log.debug("Appending formulation")
 												self.output.append([
 													self.data.iloc[matrix1.astype(int)][0],
