@@ -45,6 +45,10 @@ Future versions may include:
 
 
 
+	
+	
+	
+	
 Dn486 = (n1_486*Pct1+n2_486*Pct2+np1_486*(1-Pct1-Pct2))-(n3_486*Pct3+n4_486*Pct4+np2_486*(1-Pct3-Pct4))
 Dn587 = (n1_587*Pct1+n2_587*Pct2+np1_587*(1-Pct1-Pct2))-(n3_587*Pct3+n4_587*Pct4+np2_587*(1-Pct3-Pct4))                                 
 Dn656 = (n1_656*Pct1+n2_656*Pct2+np1_656*(1-Pct1-Pct2))-(n3_656*Pct3+n4_656*Pct4+np2_656*(1-Pct3-Pct4))                                 

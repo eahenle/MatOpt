@@ -1,1 +1,4 @@
 *.csv
+*.pyc
+old/*
+__pycache__/*
