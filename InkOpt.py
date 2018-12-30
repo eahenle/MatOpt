@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
 loghandle = logging.StreamHandler()
 loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter('%(asctime)s %(name)s|%(levelname)s %(message)s'))
+loghandle.setFormatter(logging.Formatter(LOGFORMAT))
 log.addHandler(loghandle)
 log.info("Begin log")
 
@@ -166,7 +166,11 @@ class InkOpt():
 				fail()
 			
 		# "min" values must be < "max" values
-		## IMPLEMENT
+		log.info("Checking that min < max for d1-d4")
+		for x in [1, 2, 3, 4]:
+			if self.params["d{}min".format(x)] > self.params["d{}max".format(x)]:
+				log.error("d{}min > d{}max".format(x, x))
+				fail()
 		
 		# matrix materials must be at least MINMATPCT % of composite volume 
 		## IMPLEMENT

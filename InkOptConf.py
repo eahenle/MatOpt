@@ -9,7 +9,7 @@ Configurations and settings values for InkOpt and InkOptHelpers
 import logging
 
 # Constants
-VERSION = 10.05 # Version number
+VERSION = 10.06 # Version number
 INPUTFILE = "material_table.csv" # Default input file for material properties
 MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite
 DOPSTEP = 4 # Number of points to sample in dopant percentage ranges
@@ -24,3 +24,5 @@ if(VERSION % 1 == 0):
 	LOGLEVEL = logging.ERROR
 else:
 	LOGLEVEL = logging.DEBUG
+	
+LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s"

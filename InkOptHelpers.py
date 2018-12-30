@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
 loghandle = logging.StreamHandler()
 loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter('%(asctime)s %(name)s|%(levelname)s %(message)s'))
+loghandle.setFormatter(logging.Formatter(LOGFORMAT))
 log.addHandler(loghandle)
 log.info("Begin log")
 
