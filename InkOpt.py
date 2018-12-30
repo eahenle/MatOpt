@@ -11,18 +11,8 @@ import time
 import pandas as pd
 import numpy as np
 import logging
-import InkOptHelpers
+from InkOptHelpers import *
 from InkOptConf import *
-
-
-# Set up logging
-log = logging.getLogger(__name__)
-log.setLevel(LOGLEVEL)
-loghandle = logging.StreamHandler()
-loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter(LOGFORMAT))
-log.addHandler(loghandle)
-log.info("Begin log")
 
 
 class InkOpt():
@@ -35,24 +25,33 @@ class InkOpt():
 		"""
 		Allocates a data frame for formulation outputs, serializes output file
 		"""
+		# Set up logging
+		self.log = logging.getLogger(__name__)
+		self.log.setLevel(LOGLEVEL)
+		loghandle = logging.StreamHandler()
+		loghandle.setLevel(LOGLEVEL)
+		loghandle.setFormatter(logging.Formatter(LOGFORMAT))
+		self.log.addHandler(loghandle)
+		self.log.info("Begin log")
+		
 		self.output = []
 		self.data = pd.DataFrame()
 		self.outputfile = "output_{}.csv".format(time.time())
-		log.info("InkOpt object initialized with output target {}".format(self.outputfile))
+		self.log.info("InkOpt object initialized with output target {}".format(self.outputfile))
 	
 	def readData(self, input):
 		"""
 		Creates input data frame from file
 		"""
-		self.data = pd.read_csv(input)
-		log.info("Read input from {}:\n{}".format(input, self.data))
+		self.data = pd.read_csv(input, header=0)
+		self.log.info("Read input from {}:\n{}".format(input, self.data))
 		
 	def writeOutput(self):
 		"""
 		Writes the output file as CSV
 		"""
 		self.output.to_csv(self.outputfile)
-		log.info("Wrote output to {}".format(self.outputfile))
+		self.log.info("Wrote output to {}".format(self.outputfile))
 
 	def setParams(self, fileInput = None):
 		"""
@@ -84,7 +83,7 @@ class InkOpt():
 		keys = [*params] # Unpack keys
 		
 		if(fileInput == None): # Interactive parameter acquisition
-			log.debug("Starting interactive parameter acquisition.")
+			self.log.debug("Starting interactive parameter acquisition.")
 			prompts = [ # List of parameter prompts
 				"Enter max difference between Pd,f_hi and Pd,f_lo",
 				"Enter the max P(delta)d,f",
@@ -106,22 +105,22 @@ class InkOpt():
 				"Enter the maximum percentage of dopant 4"
 			]
 			for index, key in enumerate(keys):
-				log.info("Getting input for {}".format(key))
+				self.log.info("Getting input for {}".format(key))
 				InkOptHelpers.inputf(params, key, prompts[index]) # Print prompt, store input
 		else: # Parameter inputs from file. Line order must match the params dictionary
-			log.info("Starting file parameter acquisition.")
+			self.log.info("Starting file parameter acquisition.")
 			inputs = open(fileInput).readlines() # Read file into list of lines
-			log.debug("Read from {}:\n{}".format(fileInput, inputs))
+			self.log.debug("Read from {}:\n{}".format(fileInput, inputs))
 			for index, key in enumerate(keys): # Iterate over keys
 				try:
-					log.debug("Storing {} in {}".format(inputs[index][:-1], key))
+					self.log.debug("Storing {} in {}".format(inputs[index][:-1], key))
 					params[key] = np.float64(inputs[index].split(" ")) # Cast input to float
 				except Exception as e: # Handle bad data
-					log.error("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
+					self.log.error("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
 					quit()
 
 		self.params = params # Store parameters
-		log.debug("Parameters stored:\n{}".format(self.params))
+		self.log.debug("Parameters stored:\n{}".format(self.params))
 		return self.params
 		
 	def getParams(self): # Superfluous, but whatever.
@@ -135,45 +134,42 @@ class InkOpt():
 		Checks input parameters
 		"""
 	
-		log.info("Starting parameter validation.")
+		self.log.info("Starting parameter validation.")
 	
 		def fail():
 			log.error("Input validation failed.")
 			quit()
 	
 		# All parameters must be >= 0
-		log.info("Checking for negative value inputs.")
+		self.log.info("Checking for negative value inputs.")
 		params = self.params.values()
-		log.info("Parameters: {}".format(params))
-		nums = InkOptHelpers.iflat(params)
-		log.info("Flattened inputs:\n{}".format(nums))
+		self.log.info("Parameters: {}".format(params))
+		nums = iflat(params)
+		self.log.info("Flattened inputs:\n{}".format(nums))
 		for num in nums:
-			log.debug(num)
+			self.log.debug(num)
 			try:
 				if num < 0:
-					log.error("Negative value input!")
+					self.log.error("Negative value input!")
 					fail()
 			except ValueError:
 				try:
 					for nuum in num:
 						if nuum < 0:
-							log.error("Negative value input!")
+							self.log.error("Negative value input!")
 							fail()
 				except: # Why did this take so much effort??
 					raise
 			except Exception as e:
-				log.error(e)
+				self.log.error(e)
 				fail()
 			
 		# "min" values must be < "max" values
-		log.info("Checking that min < max for d1-d4")
+		self.log.info("Checking that min < max for d1-d4")
 		for x in [1, 2, 3, 4]:
 			if self.params["d{}min".format(x)] > self.params["d{}max".format(x)]:
-				log.error("d{}min > d{}max".format(x, x))
+				self.log.error("d{}min > d{}max".format(x, x))
 				fail()
-		
-		# matrix materials must be at least MINMATPCT % of composite volume 
-		## IMPLEMENT
 		
 	def permuteV7(self):
 		"""
@@ -185,39 +181,11 @@ class InkOpt():
 			NPs for Polymer2 (single, pairs)
 			
 		This is a re-implementation of the InkOpt v7 algorithm.
+		This could be improved by determining the most selective factors and ordering the constraint checks to avoid
+		frequently unnecessary computational steps.  Alternately, order to avoid most expensive step until last.
 		"""
 		
-		counter = 0
-		
-		def calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct, dopant3, d3pct, dopant4, d4pct):
-			Dn = {
-				"486"	:	-1,
-				"587"	:	-1,
-				"656"	:	-1
-			}
-			
-			# Find matrix percentages, reject permutation if too little matrix by volume
-			mat1pct = 100 - d1pct - d2pct
-			mat2pct = 100 - d3pct - d4pct
-			if(mat1pct < MINMATPCT or mat2pct < MINMATPCT):
-				return Dn
-			
-			for wavelength in [*Dn]:
-				Dn[wavelength] = (
-					self.data.iloc[dopant1.astype(int)]["n({} nm)".format(wavelength)] * d1pct/100
-					+
-					self.data.iloc[dopant2.astype(int)]["n({} nm)".format(wavelength)] * d2pct/100
-					+
-					self.data.iloc[matrix1.astype(int)]["n({} nm)".format(wavelength)] * mat1pct/100
-					) - (
-					self.data.iloc[dopant3.astype(int)]["n({} nm)".format(wavelength)] * d3pct/100
-					+
-					self.data.iloc[dopant4.astype(int)]["n({} nm)".format(wavelength)] * d4pct/100
-					+
-					self.data.iloc[matrix2.astype(int)]["n({} nm)".format(wavelength)] * mat2pct/100
-				)
-			return Dn
-		
+		counter = 0			
 		for matrix1 in self.params["matrix1"]:
 			for matrix2 in self.params["matrix2"]:
 				for dopant1 in self.params["dopant1"]:
@@ -225,16 +193,60 @@ class InkOpt():
 						for dopant3 in self.params["dopant3"]:
 							for dopant4 in self.params["dopant4"]:
 								for d1pct in np.linspace(self.params["d1min"][0], self.params["d1max"][0], num = DOPSTEP):
+									if 100 - d1pct < MINMATPCT:
+										self.log.debug("Skipping bad permutations...")
+										break
 									for d2pct in np.linspace(self.params["d2min"][0], self.params["d2max"][0], num = DOPSTEP):
+										if 100 - d1pct - d2pct < MINMATPCT:
+											self.log.debug("Skipping bad permutations...")
+											break
 										for d3pct in np.linspace(self.params["d3min"][0], self.params["d3max"][0], num = DOPSTEP):
+											if 100 - d3pct < MINMATPCT:
+												self.log.debug("Skipping bad permutations...")
+												break
 											for d4pct in np.linspace(self.params["d4min"][0], self.params["d4max"][0], num = DOPSTEP):
+												if 100 - d3pct - d4pct < MINMATPCT:
+													self.log.debug("Skipping bad permutations...")
+													break
+											
 												counter = counter + 1
+												self.log.debug("Permutation {}".format(counter))
 												if(counter % 1000 == 0):
-													print("Working on permutation {}...".format(counter))
-												# Calulate Dn for each wavelength and check average against constraints minDnAvg and MINMATPCT
-												Dn = calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct, dopant3, d3pct, dopant4, d4pct)
+													self.log.info("Working on permutation {}...".format(counter))
+												
+												# Calulate Dn for each wavelength and check average against minDnAvg
+												Dn = calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct,
+													dopant3, d3pct, dopant4, d4pct, self.data)
 												if((Dn["486"] + Dn["587"] + Dn["656"])/3 < self.params["minDnAvg"][0]):
+													self.log.debug("Formulation Dn average too low")
 													continue
+												self.log.debug("Dn average OK")
+												
+												# Calculate Pdfs and check against maxDiffPdfs
+												if(abs(
+													calcPdf(matrix1, dopant1, d1pct, dopant2, d2pct, self.data)
+													- calcPdf(matrix2, dopant3, d3pct, dopant4, d4pct, self.data)
+													) > self.params["maxDiffPdfs"]):
+													self.log.debug("Pdf difference too great")
+													continue
+												self.log.debug("Pdf difference OK")
+												
+												# Calculate PDf and check against maxPDf
+												PDf = 1e10 if Dn["656"] == Dn["486"] else (Dn["587"] - Dn["486"]) / (Dn["656"] - Dn["486"])
+												self.log.debug("PDf is {}".format(PDf))
+												if PDf > self.params["maxPDf"]:
+													self.log.debug("PDf too high")
+													continue
+												self.log.debug("PDf OK")
+												
+												# Calculate Vgrin and check against minVgrin
+												Vgrin = 1e10 if Dn["486"] == Dn["656"] else Dn["587"] / (Dn["486"] - Dn["656"])
+												if Vgrin < self.params["minVgrin"]:
+													self.log.debug("Vgrin too low")
+													continue
+												self.log.debug("Vgrin OK")
+												
+												self.log.debug("Appending formulation")
 												self.output.append([
 													self.data.iloc[matrix1.astype(int)][0],
 													self.data.iloc[matrix2.astype(int)][0],
@@ -262,3 +274,4 @@ class InkOpt():
 		
 	def getData(self):
 		return self.data
+		

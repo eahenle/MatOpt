@@ -40,22 +40,19 @@ from InkOpt import *
 from InkOptConf import *
 
 
-# Set logging level (ERROR for stable versions, DEBUG for working versions)
-log = logging.getLogger(__name__)
-log.setLevel(LOGLEVEL)
-loghandle = logging.StreamHandler()
-loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter(LOGFORMAT))
-log.addHandler(loghandle)
-log.info("Begin log")
-
-
 # Main program block
 if __name__ == "__main__":
 
-	log.info("\nBegin main program block.")
+	# Set logging level (ERROR for stable versions, DEBUG for working versions)
+	log = logging.getLogger(__name__)
+	log.setLevel(LOGLEVEL)
+	loghandle = logging.StreamHandler()
+	loghandle.setLevel(LOGLEVEL)
+	loghandle.setFormatter(logging.Formatter(LOGFORMAT))
+	log.addHandler(loghandle)
+	log.info("Begin main program block")
 
-	# Display ASCII art
+	# Program splash
 	print(pyfiglet.figlet_format("InkOpt v{}".format(VERSION)))
 	print("©2018 Voxtel, Inc.")
 	
@@ -98,4 +95,6 @@ if __name__ == "__main__":
 	
 	#print("Permutations:\n", inkopt.getOutput("output.txt")) # Print the permutation outputs
 	inkopt.getOutput("output.txt")
+	
+	log.info("End program.")
 	
