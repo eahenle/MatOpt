@@ -34,112 +34,68 @@ iterates the tested percentage by (Max - Min)/DOPSTEP
 """
 
 import sys
-import time
-import pandas as pd
-import numpy as np
 import pyfiglet
 import logging
-import importlib
-import InkOpt
-import InkOptHelpers
+from InkOpt import *
 from InkOptConf import *
 
+
 # Set logging level (ERROR for stable versions, DEBUG for working versions)
-if(VERSION % 1 == 0):
-	LOGLEVEL = logging.ERROR
-else:
-	LOGLEVEL = logging.DEBUG
 log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
 loghandle = logging.StreamHandler()
 loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+loghandle.setFormatter(logging.Formatter('%(asctime)s %(name)s|%(levelname)s %(message)s'))
 log.addHandler(loghandle)
 log.info("Begin log")
 
 
-
-	
-	
-
-
+# Main program block
 if __name__ == "__main__":
+
+	log.info("\nBegin main program block.")
 
 	# Display ASCII art
 	print(pyfiglet.figlet_format("InkOpt v{}".format(VERSION)))
 	print("©2018 Voxtel, Inc.")
-	#print(pyfiglet.figlet_format("© VoxtelNano"))
-
-	# Instantiate InkOpt object and read material data
-	inkopt = InkOpt.InkOpt()
+	
+	log.info("Instantiating InkOpt object")
+	inkopt = InkOpt()
 	try:
-		inkopt.getData(INPUTFILE)
+		log.info("Reading data from {}".format(INPUTFILE))
+		inkopt.readData(INPUTFILE)
 	except Exception as e:
-		print("Error getting material data ({})".format(e))
+		log.error("Error getting material data ({})".format(e))
 	
-	print("")
-	
-	print("Material Data Table:\n", inkopt.data, "\n") # Display the imported material data
+	log.info("\nMaterial Data Table:\n", inkopt.getData(), "\n") # Display the imported material data
 	
 	# Check for command line argument (parameter input file)
 	try:
+		log.info("Checking for command line argument (parameter input file)")
 		numArgs = len(sys.argv)
+		log.info("Number of arguments: {}".format(numArgs))
 	except:
+		log.info("No arguments.")
 		numArgs = 0
 	
 	if(numArgs > 1):
+		log.info("Getting parameter input from {}".format(sys.argv[1]))
 		inkopt.setParams(fileInput = sys.argv[1]) # Get parameters from file
 	else:
+		log.info("Getting parameters interactively")
 		inkopt.setParams() # Get parameters interactively
 	
+	log.info("Call InkOpt input validation method")
 	inkopt.validateParams() # Validate parameters
 	
 	# Generate permutations (using the new implementation of the old algorithm)
+	log.info("Calling InkOpt v7 permutation algorithm")
 	inkopt.permuteV7()
 	
-	print("Parameters:") # Display the specified parameters
+	log.info("Parameters:") # Display the specified parameters
 	for key in inkopt.getParams():
-		print("\t{}:  {}".format(key, inkopt.getParams()[key])) # Formatting (tab width) issue
-	
-	print("")
+		log.info("\t{}:  {}".format(key, inkopt.getParams()[key])) # Formatting (tab width) issue
 	
 	#print("Permutations:\n", inkopt.getOutput("output.txt")) # Print the permutation outputs
 	inkopt.getOutput("output.txt")
-	
-	print("")
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	

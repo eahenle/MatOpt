@@ -1,20 +1,25 @@
-import sys
-import time
-import pandas as pd
-import numpy as np
-import pyfiglet
+"""
+InkOptHelpers.py
+Adrian Henle
+Voxtel, Inc.
+
+Helper functions for InkOpt
+"""
+
+
 import logging
-from InkOptConf import * 
+from InkOptConf import *
 
-LOGLEVEL = logging.INFO
 
+# Set up logging
 log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
 loghandle = logging.StreamHandler()
 loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+loghandle.setFormatter(logging.Formatter('%(asctime)s %(name)s|%(levelname)s %(message)s'))
 log.addHandler(loghandle)
 log.info("Begin log")
+
 
 def inputf(dict, key, prompt):
 	"""
@@ -46,3 +51,4 @@ def iflat(iterable):
 			log.debug("yielding {} to element generator".format(element))
 			yield element
 	log.debug("RET iflat({})".format(iterable))
+	

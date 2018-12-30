@@ -46,7 +46,7 @@ Future versions may include:
 
 
 	
-	
+Relevant math:	
 	
 	
 Dn486 = (n1_486*Pct1+n2_486*Pct2+np1_486*(1-Pct1-Pct2))-(n3_486*Pct3+n4_486*Pct4+np2_486*(1-Pct3-Pct4))
@@ -89,6 +89,15 @@ else:
 	
 
 Dnavg = (Dn486 + Dn587 + Dn656)/3
+
+
+
+
+
+IMPLEMENT
+	MINMATPCT enforcement
+
+
 
 
 VALIDATION:

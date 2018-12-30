@@ -1,21 +1,29 @@
-import sys
+"""
+InkOpt.py
+Adrian Henle
+Voxtel, Inc.
+
+InkOpt class definition.
+"""
+
+
 import time
 import pandas as pd
 import numpy as np
-import pyfiglet
 import logging
 import InkOptHelpers
 from InkOptConf import *
 
-LOGLEVEL = logging.INFO
 
+# Set up logging
 log = logging.getLogger(__name__)
 log.setLevel(LOGLEVEL)
 loghandle = logging.StreamHandler()
 loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+loghandle.setFormatter(logging.Formatter('%(asctime)s %(name)s|%(levelname)s %(message)s'))
 log.addHandler(loghandle)
 log.info("Begin log")
+
 
 class InkOpt():
 	"""
@@ -28,10 +36,11 @@ class InkOpt():
 		Allocates a data frame for formulation outputs, serializes output file
 		"""
 		self.output = []
+		self.data = pd.DataFrame()
 		self.outputfile = "output_{}.csv".format(time.time())
 		log.info("InkOpt object initialized with output target {}".format(self.outputfile))
 	
-	def getData(self, input):
+	def readData(self, input):
 		"""
 		Creates input data frame from file
 		"""
@@ -246,3 +255,6 @@ class InkOpt():
 				print("Error writing to {} ({})".format(self.outputfile, e))
 		
 		return self.output
+		
+	def getData(self):
+		return self.data
