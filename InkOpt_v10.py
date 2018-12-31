@@ -35,11 +35,12 @@ iterates the tested percentage by (Max - Min)/DOPSTEP
 
 
 import sys
-import pyfiglet
 import logging
 import signal
+import tkinter as tk
 from InkOpt import *
 from InkOptConf import *
+from InkOptGUI import *
 
 
 # Main program block
@@ -53,11 +54,33 @@ if __name__ == "__main__":
 	loghandle.setFormatter(logging.Formatter(LOGFORMAT))
 	log.addHandler(loghandle)
 	log.info("Begin main program block")
-
-	# Program splash
-	print(pyfiglet.figlet_format("InkOpt v{}".format(VERSION)))
+	
+	# GUI Time!  This'll be interesting...
+	try:
+		consoleFlag = False # If GUI mode launches, don't enter console mode
+		root = tk.Tk() # Main window
+		root.title("VoxtelNano Ink Optimizer v{}".format(VERSION))
+		mainWindow = MainWindow(root)
+		root.mainloop() # Launch the window
+	except tk._tkinter.TclError as e:
+		if ENABLECONSOLE:
+			log.error("{}\nGoing to console application mode.".format(e))
+			consoleFlag = True
+		else:
+			raise e
+	except Exception as e:
+		raise e
+	
+	# Run in console mode if GUI mode has errors
+	if not consoleFlag:
+		log.info("Program exit")
+		quit()
+		
+	# Console splash
+	print(SPLASH)
 	print("©2018 Voxtel, Inc.")
 	
+	# Spin up the Ink Optimizer
 	log.info("Instantiating InkOpt object")
 	inkopt = InkOpt()
 	try:
