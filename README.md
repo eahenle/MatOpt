@@ -29,8 +29,11 @@ Input specifications:
 	MaxPercent3:	the maximum volume % loading of Dopant3
 	MinPercent4:	the minimum volume % loading of Dopant4
 	MaxPercent4:	the maximum volume % loading of Dopant4
-	
-Inputs may be specified interactively, or by specifying a parameter input file at runtime.
+
+By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
+Console mode can be disabled by setting ENABLECONSOLE = False in InkOptConf.py
+
+On the console, inputs may be specified interactively or by specifying a parameter input file at runtime.
 Input files must specify parameters in the order shown above. List-type data are entered
 as space-delimited lists on a single line.  Non-numeric inputs are rejected.
 	
@@ -38,12 +41,11 @@ Dopant percentages are permuted with a density of DOPSTEP samples in each range.
 iterates the tested percentage by (Max - Min)/DOPSTEP
 
 Future versions may include:
-	GUI
-	Generation of massive SQL databases (minimal end-user compute time for finding
+	Generation of massive CSV or SQL databases (minimal end-user compute time for finding
 		good formulations with complex requirements)
 	Training and application of predictive modeling for ultra-fast screening
 	Handling of empty string for co-dopants.  There is no way to leave this input blank, which may be
-	inappropriate for some use cases.
+		inappropriate for some use cases.
 	Parallelization
 	Execution time estimation
 	
