@@ -1,4 +1,4 @@
-*.csv
+output_*.*.csv
 *.pyc
 old/*
 __pycache__/*
