@@ -11,7 +11,7 @@ import pyfiglet
 
 
 # Constants
-VERSION = 10.11 # Version number
+VERSION = 10.12 # Version number
 ABOUT = "VoxtelNano Ink Optimizer v{}\nAdrian Henle\n©2018 Voxtel, Inc.".format(VERSION)
 ENABLECONSOLE = False # Disabled for GUI development
 SPLASH = pyfiglet.figlet_format("InkOpt v{}".format(VERSION))

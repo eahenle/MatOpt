@@ -39,11 +39,14 @@ class InkOpt():
 		self.outputfile = "output_{}.csv".format(time.time())
 		self.log.info("InkOpt object initialized with output target {}".format(self.outputfile))
 	
-	def readData(self, input):
+	def readData(self, input, noheaders = False):
 		"""
 		Creates input data frame from file
 		"""
-		self.data = pd.read_csv(input, header=0)
+		if noheaders == False:
+			self.data = pd.read_csv(input, header = 0)
+		else:
+			self.data = pd.read_csv(input, header = None)
 		self.log.info("Read input from {}:\n{}".format(input, self.data))
 		
 	def writeOutput(self):
