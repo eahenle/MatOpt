@@ -43,24 +43,29 @@ from InkOptConf import *
 from InkOptGUI import *
 
 
+# Set logging level (ERROR for stable versions, DEBUG for working versions)
+log = logging.getLogger(__name__)
+log.setLevel(LOGLEVEL)
+loghandle = logging.StreamHandler()
+loghandle.setLevel(LOGLEVEL)
+loghandle.setFormatter(logging.Formatter(LOGFORMAT))
+log.addHandler(loghandle)
+log.info("Begin main program block")
+
+
 # Main program block
 if __name__ == "__main__":
 
-	# Set logging level (ERROR for stable versions, DEBUG for working versions)
-	log = logging.getLogger(__name__)
-	log.setLevel(LOGLEVEL)
-	loghandle = logging.StreamHandler()
-	loghandle.setLevel(LOGLEVEL)
-	loghandle.setFormatter(logging.Formatter(LOGFORMAT))
-	log.addHandler(loghandle)
-	log.info("Begin main program block")
+	# Spin up the Ink Optimizer
+	log.info("Instantiating InkOpt object")
+	inkopt = InkOpt()
 	
 	# GUI Time!  This'll be interesting...
 	try:
 		consoleFlag = False # If GUI mode launches, don't enter console mode
 		root = tk.Tk() # Main window
 		root.title("VoxtelNano Ink Optimizer v{}".format(VERSION))
-		mainWindow = MainWindow(root)
+		GUI = MainWindow(root, inkopt)
 		root.mainloop() # Launch the window
 	except tk._tkinter.TclError as e:
 		if ENABLECONSOLE:
@@ -80,9 +85,7 @@ if __name__ == "__main__":
 	print(SPLASH)
 	print("©2018 Voxtel, Inc.")
 	
-	# Spin up the Ink Optimizer
-	log.info("Instantiating InkOpt object")
-	inkopt = InkOpt()
+	
 	try:
 		log.info("Reading data from {}".format(INPUTFILE))
 		inkopt.readData(INPUTFILE)
