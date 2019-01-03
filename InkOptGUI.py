@@ -9,12 +9,17 @@ Provides GUI elements for InkOpt
 import tkinter as tk
 from InkOptConf import *
 
-class MainWindow:
+class InkOptGUI:
 	"""
 	The root interface (main window) for InkOpt's GUI
 	"""
-	def __init__(self, master, inkopt):
 	
+	def __init__(self, master, inkopt):
+		"""
+		Set up logging, store InkOpt, and launch GUI Main Window
+		"""
+	
+		# Start logging
 		self.log = logging.getLogger(__name__)
 		self.log.setLevel(LOGLEVEL)
 		self.loghandle = logging.StreamHandler()
@@ -23,40 +28,74 @@ class MainWindow:
 		self.log.addHandler(self.loghandle)
 		self.log.info("Begin log")
 		
+		# The InkOpt object passed in at instantiation is our engine for running data tasks
 		self.inkopt = inkopt
 	
-		self.frame = tk.Frame(master)
-			
-		self.textLabel = tk.Label(master, text=SPLASH) # ASCII logo element for main window
-		self.textLabel.pack(side = tk.TOP) # Format for display
+		# [Tk root]
+		self.tkroot = tk.Frame(master)
+		self.tkroot.pack()
 	
-		self.buttons = tk.Frame(self.frame)
-		self.buttons.runButton = tk.Button(self.buttons, text = "Run", fg = "green", command = self.Run)
-		self.buttons.runButton.pack()
-		self.buttons.quitButton = tk.Button(self.buttons, text = "Exit", fg = "red", command = master.quit)
-		self.buttons.quitButton.pack(side = tk.BOTTOM)
-		self.helloButton = tk.Button(self.buttons, text = "About", command = self.about)
-		self.helloButton.pack(side = tk.BOTTOM)
+		# MainWindow
+		# ## Functionalize
+		self.log.debug("Building MainWindow")
+		self.MainWindow = tk.Frame(self.tkroot)
+		self.MainWindow.pack()
+			
+		# MainWindow >> ASCII Splash
+		self.log.debug("Rendering Main Window >> ASCII splash")
+		self.MainWindow.splash = tk.Frame(self.MainWindow)
+		self.MainWindow.splash.pack(side = tk.TOP)
+		self.MainWindow.splash.art = tk.Label(self.MainWindow.splash, text=SPLASH)
+		self.MainWindow.splash.art.pack()
+	
+		# MainWindow >> Button Panel
+		self.log.debug("Building MainWindow >> Button Panel")
+		self.buttons = tk.Frame(self.MainWindow)
 		self.buttons.pack()
-		self.frame.pack()
 		
-		self.copyright = tk.Label(master, text = "©2018 Voxtel, Inc.")
-		self.copyright.pack(side = tk.LEFT)		
+		# MainWindow >> Button Panel >> Run Button
+		self.buttons.runButton = tk.Button(self.buttons, text = RUNBUTTONTEXT, fg = RUNBUTTONCOLOR, command = self.Run)
+		self.buttons.runButton.pack(side = tk.TOP)
+		
+		# MainWindow >> Button Panel >> Quit Button
+		self.buttons.quitButton = tk.Button(self.buttons, text = EXITBUTTONTEXT, fg = EXITBUTTONCOLOR, command = master.quit)
+		self.buttons.quitButton.pack(side = tk.BOTTOM)
+		
+		# MainWindow >> Button Panel >> About Button
+		self.helloButton = tk.Button(self.buttons, text = ABOUTBUTTONTEXT, command = self.about)
+		self.helloButton.pack()
+		
+		# MainWindow >> Copyright
+		self.copyright = tk.Frame(self.MainWindow)
+		self.copyright.pack(side = tk.BOTTOM)
+		self.copyright.text = tk.Label(master, text = COPYRIGHT)
+		self.copyright.text.pack(side = tk.LEFT)
+		
 		
 	def Run(self):
+		"""
+		Launches the InkOpt dialog windows (Parameter, Data, Permutation)
+		"""
+		
 		self.log.info("Launching GUI Controls")
 		
 		# [Re]open the Parameter Window
+		# ## Change this to test for window (don't destroy)
+		# ## Functionalize
 		try:
 			self.ParamWindow.destroy()
+			self.log.debug("Closed ParmeterWindow")
 		except AttributeError:
-			pass
+			self.log.debug("ParameterWindow not open")
 		except:
 			raise
-		self.ParamWindow = tk.Toplevel()
-		self.ParamWindow.title("Parameter Window")
+		self.log.debug("Building ParameterWindow")
+		self.ParamWindow = tk.Toplevel() # ## Change this to store the toplevel objects as a list of Tk nodes
+		self.ParamWindow.title(PARAMWINDOWTITLE)
 		self.ParamWindow.frame = tk.Frame(self.ParamWindow)
 		self.ParamWindow.frame.pack()
+		self.ParamWindow.frame.widthprop = tk.Frame(self.ParamWindow.frame, width = SMALLWINDOWX, height = 0)
+		self.ParamWindow.frame.widthprop.pack(side = tk.TOP)
 		
 		# Define the frame for loading from file
 		self.ParamWindow.frame.loadframe = tk.Frame(self.ParamWindow.frame)
@@ -74,7 +113,7 @@ class MainWindow:
 		self.ParamWindow.frame.paramframe.pack(side = tk.BOTTOM)
 		
 		"""Populate the parameter frame with tk.Label/tk.Entry (key/value) pairs"""
-		
+		# ## Functionalize
 		# maxDiffPdfs
 		self.ParamWindow.frame.paramframe.maxDiffPdfs = tk.Frame(self.ParamWindow.frame.paramframe)
 		self.ParamWindow.frame.paramframe.maxDiffPdfs.pack()
@@ -239,61 +278,89 @@ class MainWindow:
 		self.ParamWindow.frame.paramframe.d4max.value.pack(side = tk.RIGHT)
 		
 		# Copyright
-		self.ParamWindow.copyright = tk.Label(self.ParamWindow, text = "©2018 Voxtel, Inc.")
-		self.ParamWindow.copyright.pack(side = tk.LEFT)
+		self.ParamWindow.copyright = tk.Frame(self.ParamWindow)
+		self.ParamWindow.copyright.pack(side = tk.BOTTOM)
+		self.ParamWindow.copyright.text = tk.Label(self.ParamWindow, text = COPYRIGHT)
+		self.ParamWindow.copyright.text.pack(side = tk.LEFT)
 		
 		# [Re]open the Data Window
+		# ## Change this to test for window (don't destroy)
+		# ## Functionalize
 		try:
 			self.DataWindow.destroy()
 		except AttributeError:
 			pass
 		except:
 			raise
-		self.DataWindow = tk.Toplevel()
+		self.DataWindow = tk.Toplevel() # ## Change this to store the toplevel objects as a list of Tk nodes
 		self.DataWindow.title("Data Table Window")
-		self.DataWindow.frame = tk.Frame(self.DataWindow)
+		self.DataWindow.frame = tk.Frame(self.DataWindow, width = SMALLWINDOWX, height = SMALLWINDOWY)
 		self.DataWindow.frame.pack()
 		
 		# [Re]open the Permutation Window
+		# ## Change this to test for window (don't destroy)
+		# ## Functionalize
 		try:
 			self.PermuteWindow.destroy()
 		except AttributeError:
 			pass
 		except:
 			raise
-		self.PermuteWindow = tk.Toplevel()
+		self.PermuteWindow = tk.Toplevel() # ## Change this to store the toplevel objects as a list of Tk nodes
 		self.PermuteWindow.title("Permutation Window")
-		self.PermuteWindow.frame = tk.Frame(self.PermuteWindow)
+		self.PermuteWindow.frame = tk.Frame(self.PermuteWindow, width = LARGEWINDOWX, height = LARGEWINDOWY)
 		self.PermuteWindow.frame.pack()
 		
-		# Data Window gets focus
-		self.DataWindow.focus_set()
 		
 	def loadParams(self):
+		"""
+		Trigger the InkOpt engine to read input parameters from the input file indicated in the Parameter Window.
+		Populate Parameter Window fields with values from input.
+		"""
+		
 		self.log.debug("Entering loadParams()")
 		
-		# tk set
+		# Get parameters from input file via InkOpt.setParams()
 		self.log.debug("Getting parameters from {}".format(self.ParamWindow.frame.loadframe.inputfile.get()))
 		self.inkopt.setParams(self.ParamWindow.frame.loadframe.inputfile.get())
 		self.log.debug("Parameters:\n{}\n".format(*self.inkopt.params))
-		self.ParamWindow.frame.paramframe.maxDiffPdfs.var.set(*self.inkopt.params["maxDiffPdfs"])
-		self.ParamWindow.frame.paramframe.maxPDf.var.set(*self.inkopt.params["maxPDf"])
-		self.ParamWindow.frame.paramframe.minVgrin.var.set(*self.inkopt.params["minVgrin"])
-		self.ParamWindow.frame.paramframe.minDnAvg.var.set(*self.inkopt.params["minDnAvg"])
-		self.ParamWindow.frame.paramframe.matrix1.var.set([*self.inkopt.params["matrix1"]])
-		self.ParamWindow.frame.paramframe.matrix2.var.set([*self.inkopt.params["matrix2"]])
-		self.ParamWindow.frame.paramframe.dopant1.var.set([*self.inkopt.params["dopant1"]])
-		self.ParamWindow.frame.paramframe.dopant2.var.set([*self.inkopt.params["dopant2"]])
-		self.ParamWindow.frame.paramframe.dopant3.var.set([*self.inkopt.params["dopant3"]])
-		self.ParamWindow.frame.paramframe.dopant4.var.set([*self.inkopt.params["dopant4"]])
-		self.ParamWindow.frame.paramframe.d1min.var.set(*self.inkopt.params["d1min"])
-		self.ParamWindow.frame.paramframe.d1max.var.set(*self.inkopt.params["d1max"])
-		self.ParamWindow.frame.paramframe.d2min.var.set(*self.inkopt.params["d2min"])
-		self.ParamWindow.frame.paramframe.d2max.var.set(*self.inkopt.params["d2max"])
-		self.ParamWindow.frame.paramframe.d3min.var.set(*self.inkopt.params["d3min"])
-		self.ParamWindow.frame.paramframe.d3max.var.set(*self.inkopt.params["d3max"])
-		self.ParamWindow.frame.paramframe.d4min.var.set(*self.inkopt.params["d4min"])
-		self.ParamWindow.frame.paramframe.d4max.var.set(*self.inkopt.params["d4max"])
+		
+		# List of Parameter Window fields
+		self.ParamWindow.params = {
+			"maxDiffPdfs" : self.ParamWindow.frame.paramframe.maxDiffPdfs,
+			"maxPDf" : self.ParamWindow.frame.paramframe.maxPDf,
+			"minVgrin" : self.ParamWindow.frame.paramframe.minVgrin,
+			"minDnAvg" : self.ParamWindow.frame.paramframe.minDnAvg,
+			"matrix1" : self.ParamWindow.frame.paramframe.matrix1,
+			"matrix2" : self.ParamWindow.frame.paramframe.matrix2,
+			"dopant1" : self.ParamWindow.frame.paramframe.dopant1,
+			"dopant2" : self.ParamWindow.frame.paramframe.dopant2,
+			"dopant3" : self.ParamWindow.frame.paramframe.dopant3,
+			"dopant4" : self.ParamWindow.frame.paramframe.dopant4,
+			"d1min" : self.ParamWindow.frame.paramframe.d1min,
+			"d1max" : self.ParamWindow.frame.paramframe.d1max,
+			"d2min" : self.ParamWindow.frame.paramframe.d2min,
+			"d2max" : self.ParamWindow.frame.paramframe.d2max,
+			"d3min" : self.ParamWindow.frame.paramframe.d3min,
+			"d3max" : self.ParamWindow.frame.paramframe.d3max,
+			"d4min" : self.ParamWindow.frame.paramframe.d4min,
+			"d4max" : self.ParamWindow.frame.paramframe.d4max
+		}
+		
+		self.log.debug("ParamWindow.params.items():\n{}\n".format(self.ParamWindow.params.items()))
+		
+		# Copy parameters into window field stringvars and refresh field text
+		for param in self.ParamWindow.params.items():
+			self.log.debug("Setting {} to *{}".format(param[0], [*self.inkopt.params["{}".format(param[0])]]))
+			# Set value
+			if len([*self.inkopt.params["{}".format(param[0])]]) == 1:
+				param[1].var.set(*self.inkopt.params["{}".format(param[0])])
+			else:
+				param[1].var.set([*self.inkopt.params["{}".format(param[0])]]) # ## This could be done better to avoid weirdness in the UI
+			# Refresh field
+			param[1].value.delete(0, tk.END)
+			param[1].value.insert(0, param[1].var.get())
+		
 		self.log.debug("paramframe.*.var: {}\n".format([
 			self.ParamWindow.frame.paramframe.maxDiffPdfs.var.get(),
 			self.ParamWindow.frame.paramframe.maxPDf.var.get(),
@@ -308,38 +375,14 @@ class MainWindow:
 			*self.inkopt.params["d4max"]
 			]))
 		
-		# tk re-get
-		self.ParamWindow.frame.paramframe.params = [
-			self.ParamWindow.frame.paramframe.maxDiffPdfs,
-			self.ParamWindow.frame.paramframe.maxPDf,
-			self.ParamWindow.frame.paramframe.minVgrin,
-			self.ParamWindow.frame.paramframe.minDnAvg,
-			self.ParamWindow.frame.paramframe.matrix1,
-			self.ParamWindow.frame.paramframe.matrix2,
-			self.ParamWindow.frame.paramframe.dopant1,
-			self.ParamWindow.frame.paramframe.dopant2,
-			self.ParamWindow.frame.paramframe.dopant3,
-			self.ParamWindow.frame.paramframe.dopant4,
-			self.ParamWindow.frame.paramframe.d1min,
-			self.ParamWindow.frame.paramframe.d1max,
-			self.ParamWindow.frame.paramframe.d2min,
-			self.ParamWindow.frame.paramframe.d2max,
-			self.ParamWindow.frame.paramframe.d3min,
-			self.ParamWindow.frame.paramframe.d3max,
-			self.ParamWindow.frame.paramframe.d4min,
-			self.ParamWindow.frame.paramframe.d4max
-		]
-		
-		for param in self.ParamWindow.frame.paramframe.params:
-			param.value.delete(0, tk.END)
-			param.value.insert(0, param.var.get())
-		
 	def about(self):
 		"""
 		Window that shows an "about" message with a button to close it.
 		"""
-		AboutWindow = tk.Toplevel()
-		AboutWindow.title = "About"
+		tknode = tk.Toplevel()
+		tknode.title = "About"
+		AboutWindow = tk.Frame(tknode)
+		AboutWindow.pack()
 		message = tk.Message(AboutWindow, text = ABOUT)
 		message.pack()
 		self.log.info("About this software:\n{}".format(ABOUT))

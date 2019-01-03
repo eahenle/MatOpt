@@ -48,23 +48,4 @@ Future versions may include:
 		inappropriate for some use cases.
 	Parallelization
 	Execution time estimation
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
+	Background processing (safe UI exit w/ background conclusion of data task)

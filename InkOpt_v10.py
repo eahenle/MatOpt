@@ -65,7 +65,7 @@ if __name__ == "__main__":
 		consoleFlag = False # If GUI mode launches, don't enter console mode
 		root = tk.Tk() # Main window
 		root.title("VoxtelNano Ink Optimizer v{}".format(VERSION))
-		GUI = MainWindow(root, inkopt)
+		GUI = InkOptGUI(root, inkopt)
 		root.mainloop() # Launch the window
 	except tk._tkinter.TclError as e:
 		if ENABLECONSOLE:
