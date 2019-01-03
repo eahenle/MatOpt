@@ -23,38 +23,65 @@ class InkOpt():
 	
 	def __init__(self):
 		"""
-		Allocates a data frame for formulation outputs, serializes output file
+		Allocates and initializes.
 		"""
 		# Set up logging
-		self.log = logging.getLogger(__name__)
-		self.log.setLevel(LOGLEVEL)
-		loghandle = logging.StreamHandler()
-		loghandle.setLevel(LOGLEVEL)
-		loghandle.setFormatter(logging.Formatter(LOGFORMAT))
-		self.log.addHandler(loghandle)
+		self.log = startLog(__name__)
 		self.log.info("Begin log")
 		
+		# Declare output list
+		# ## List is efficient as implemented.  A DataFrame would be nicer in the end, but is SLOW to .append()... Transform later?
 		self.output = []
+		
+		# Declare DataFrame for material data
 		self.data = pd.DataFrame()
+		
+		# Serialize output file name
 		self.outputfile = "output_{}.csv".format(time.time())
+		
 		self.log.info("InkOpt object initialized with output target {}".format(self.outputfile))
+		# ## Gonna need to implement a way to avoid overwriting output
 	
-	def readData(self, input, noheaders = False):
+	
+	def readData(self, input, headers = True):
 		"""
 		Creates input data frame from file
 		"""
-		if noheaders == False:
+		# By default, read first line as column headers.  Otherwise, read without headers.
+		if headers == True:
 			self.data = pd.read_csv(input, header = 0)
 		else:
 			self.data = pd.read_csv(input, header = None)
 		self.log.info("Read input from {}:\n{}".format(input, self.data))
 		
-	def writeOutput(self):
+		return self.data
+		
+		
+	def writeOutput(self, output = None, outputfile = None, log = None):
 		"""
 		Writes the output file as CSV
 		"""
-		self.output.to_csv(self.outputfile)
-		self.log.info("Wrote output to {}".format(self.outputfile))
+		# ## Write a lambda for this.  I'm sure it can be done!
+		output = output if not output == None else self.output
+		outputfile = outputfile if not outputfile == None else self.outputfile
+		log = log if not log == None else self.log
+		try:
+			output.to_csv(outputfile)
+			log.info("Wrote output to {}".format(outputfile))
+		except:
+			log.error("Error writing to {}".format(outputfile))
+			
+			
+	# ## Put a lot more try/except blocks everywhere.
+	# ## This compiles but it doesn't execute.  Can it be fixed?  This is pure curiosity.
+	"""try:
+		def func(self):
+			return 1/0
+	except:
+		def func(self):
+			return 2"""
+	# ## Remove "self." and "*.*.*.*.*.*" from all over.
+		
 
 	def setParams(self, fileInput = None):
 		"""
@@ -63,6 +90,7 @@ class InkOpt():
 		"""
 		
 		# Parameter dictionary. Order must be the same as prompts array.
+		# ## Find a way to build this from a config file
 		params = {
 			"maxDiffPdfs"	:		None,
 			"maxPDf"		:		None,
@@ -85,9 +113,10 @@ class InkOpt():
 		}
 		keys = [*params] # Unpack keys
 		
-		if(fileInput == None): # Interactive parameter acquisition
+		if(fileInput == None):
+		# Interactive parameter acquisition
 			self.log.debug("Starting interactive parameter acquisition.")
-			prompts = [ # List of parameter prompts
+			prompts = [ # List of parameter prompts # ## Find a way to build this from a config file
 				"Enter max difference between Pd,f_hi and Pd,f_lo",
 				"Enter the max P(delta)d,f",
 				"Enter the minimum Vgrin",
@@ -109,8 +138,9 @@ class InkOpt():
 			]
 			for index, key in enumerate(keys):
 				self.log.info("Getting input for {}".format(key))
-				inputf(params, key, prompts[index]) # Print prompt, store input
-		else: # Parameter inputs from file. Line order must match the params dictionary
+				inputf(params, key, prompts[index]) # Print prompt, store user input
+		else:
+		# Parameter inputs from file. Line order must match the params dictionary
 			self.log.info("Starting file parameter acquisition.")
 			inputs = open(fileInput).readlines() # Read file into list of lines
 			self.log.debug("Read from {}:\n{}".format(fileInput, inputs))
@@ -120,17 +150,19 @@ class InkOpt():
 					params[key] = np.float64(inputs[index].split(" ")) # Cast input to float
 				except Exception as e: # Handle bad data
 					self.log.error("Error in file input for {}:{{{}}} ({})".format(key, inputs[index], e))
-					quit()
+					Quit(self.log)
 
 		self.params = params # Store parameters
 		self.log.debug("Parameters stored:\n{}".format(self.params))
 		return self.params
+		
 		
 	def getParams(self): # Superfluous, but whatever.
 		"""
 		Return the params object of InkOpt's input parameters as a dict.
 		"""
 		return self.params
+		
 		
 	def validateParams(self):
 		"""
@@ -140,7 +172,7 @@ class InkOpt():
 	
 		def fail():
 			log.error("Input validation failed.")
-			quit()
+			Quit(self.log)
 	
 		# All parameters must be >= 0
 		self.log.info("Checking for negative value inputs.")
@@ -172,7 +204,11 @@ class InkOpt():
 			if self.params["d{}min".format(x)] > self.params["d{}max".format(x)]:
 				self.log.error("d{}min > d{}max".format(x, x))
 				fail()
+				
+		## There must be other conditions to check...
 		
+		
+	# ## This needs unit testing
 	def permuteV7(self):
 		"""
 		Permute the following lists with each other:
@@ -269,7 +305,11 @@ class InkOpt():
 													d4pct
 												])
 		
+		
 	def getOutput(self, writeToFile = None):
+		"""
+		Return the output of the permutation and testing algorithms.  Write to a file if a file name is specified.
+		"""
 		if(writeToFile != None):
 			df = pd.DataFrame(self.output)
 			df.columns = ["matrix1", "matrix2", "dopant1", "dopant2", "dopant3", "dopant4", "d1pct", "d2pct", "d3pct", "d4pct"]
@@ -281,6 +321,10 @@ class InkOpt():
 		
 		return self.output
 		
+		
 	def getData(self):
+		"""
+		Return the material data table
+		"""
 		return self.data
 		

@@ -6,21 +6,39 @@ Voxtel, Inc.
 Helper functions for InkOpt
 """
 
-
+# ## Check dependencies for redundancies
+# ## see about the right way to use packages...
 import numpy as np
 import logging
+import time
+import sys
 from InkOptConf import *
 
 
-# Set up logging
-log = logging.getLogger(__name__)
-log.setLevel(LOGLEVEL)
-loghandle = logging.StreamHandler()
-loghandle.setLevel(LOGLEVEL)
-loghandle.setFormatter(logging.Formatter(LOGFORMAT))
-log.addHandler(loghandle)
-log.info("Begin log")
+# ## Improve by handling INFO and ERROR logging in a StreamHandler, and DEBUG logging in a FileHandler
+def startLog(name, level = LOGLEVEL, format = LOGFORMAT):
+	"""
+	Helper function to spin up a logger stream.
+	Invoke with log = startLog(__name__)
+	"""
+	log = logging.getLogger(name)
+	log.setLevel(level)
+	loghandle = logging.StreamHandler()
+	loghandle.setLevel(level)
+	loghandle.setFormatter(logging.Formatter(format))
+	log.addHandler(loghandle)
+	return log
 
+
+# ## Try to use this with SIGINT and SIGKILL
+def Quit(log, code = 0, msg = None):
+	"""
+	Helper function that swiftly exits the program.
+	"""
+	# ## Hack this line to intelligently handle a msg = None situation
+	log.info("The program is exiting with message {}; Up-time: {} second(s)\n".format(msg, int(time.time() - STARTTIME)))
+	sys.exit(code)
+			
 
 def inputf(dict, key, prompt):
 	"""
@@ -34,7 +52,7 @@ def inputf(dict, key, prompt):
 			break
 		except KeyboardInterrupt:
 			log.error("Ctrl+C quit")
-			quit()
+			Quit(log)
 		except:
 			print("Bad input to {}".format(key))
 			inpstr = ""
@@ -100,7 +118,7 @@ def calcPdf(matrix, dopant1, d1pct, dopant2, d2pct, data):
 	log.debug("Calculating Pdf for {} with {} ({}%) and {} ({}%)".format(
 		data.iloc[matrix]["Material"], data.iloc[dopant1]["Material"], d1pct, data.iloc[dopant2]["Material"], d2pct))
 	return np.float64(
-		(data.iloc[dopant1]["n(587 nm)"] * d1pct / 100#data.iloc[dopant1.astype(int)]["n(587 nm)"] * d1pct / 100
+		(data.iloc[dopant1]["n(587 nm)"] * d1pct / 100
 		+ data.iloc[dopant2]["n(587 nm)"] * d2pct / 100
 		+ data.iloc[matrix]["n(587 nm)"] * (1 - (d1pct + d2pct) / 100)
 		- data.iloc[dopant1]["n(486 nm)"] * d1pct / 100

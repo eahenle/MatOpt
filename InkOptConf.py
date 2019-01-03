@@ -9,6 +9,7 @@ Configurations and settings values for InkOpt and InkOptHelpers
 
 import logging
 import pyfiglet
+import time
 
 
 # Definitions
@@ -20,7 +21,7 @@ INTERCONSOLE = DISABLED
 
 # General Constants
 PROGNAME = "VoxtelNano Ink Optimizer"
-VERSION = 10.14 # Version number
+VERSION = 10.15 # Version number
 COPYRIGHT = "©2019 Voxtel, Inc."
 LEADDEV = "Adrian Henle"
 ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)
@@ -55,6 +56,8 @@ else:
 	LOGLEVEL = logging.DEBUG
 	
 # Output formatting string for logging handlers
-LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s" # ## See if this can give stack context or the line number of where it's returning
+LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s"
 
 # ## Some of this stuff should be buried in the production version, and some should be left in a conf.txt file.  Split eventually.
+
+STARTTIME = time.time()
