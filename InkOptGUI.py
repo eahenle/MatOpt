@@ -310,6 +310,7 @@ class InkOptGUI:
 		self.PermuteWindow.title("Permutation Window")
 		self.PermuteWindow.frame = tk.Frame(self.PermuteWindow, width = LARGEWINDOWX, height = LARGEWINDOWY)
 		self.PermuteWindow.frame.pack()
+		# ## Permutation Window should update InkOpt data and params with Data and Permutation Window field values before run
 		
 		
 	def loadParams(self):

@@ -11,14 +11,23 @@ import logging
 import pyfiglet
 
 
-# Constants
-VERSION = 10.13 # Version number
+# Definitions
+ENABLED = True
+DISABLED = False
+
+# Use Mode Settings
+INTERCONSOLE = DISABLED
+
+# General Constants
+PROGNAME = "VoxtelNano Ink Optimizer"
+VERSION = 10.14 # Version number
 COPYRIGHT = "©2019 Voxtel, Inc."
-ABOUT = "VoxtelNano Ink Optimizer v{}\n\nAdrian Henle\n\n{}\n".format(VERSION, COPYRIGHT)
-ENABLECONSOLE = False # Disabled for GUI development
+LEADDEV = "Adrian Henle"
+ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)
 SPLASH = pyfiglet.figlet_format("InkOpt v{}".format(VERSION))
-INPUTFILE = "material_table.csv" # Default input file for material properties
-MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite
+INPUTFILE = "material_table.csv" # Default input file for material propertie
+
+# GUI Settings
 SMALLWINDOWX = 300
 SMALLWINDOWY = 400
 LARGEWINDOWX = 600
@@ -29,11 +38,14 @@ EXITBUTTONTEXT = "Exit"
 EXITBUTTONCOLOR = "red"
 ABOUTBUTTONTEXT = "About"
 PARAMWINDOWTITLE = "Parameter Window"
-DOPSTEP = 6 # Number of points to sample in dopant percentage ranges
+
+# Algorithm Settings
+MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite
+DOPSTEP = 5 # Number of points to sample in dopant percentage ranges
 """
 	### WARNING! ###
 	Complexity for v7 algorithm is O(k^DOPSTEP).
-	Don't increase sampling density unless you have all day to run permutations.
+	5 is pretty good for testing purposes.  Don't increase sampling density unless you have all day to run permutations.
 """
 
 # Set loggers for debugging in development versions, error reporting in stable versions
@@ -43,4 +55,6 @@ else:
 	LOGLEVEL = logging.DEBUG
 	
 # Output formatting string for logging handlers
-LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s"
+LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s" # ## See if this can give stack context or the line number of where it's returning
+
+# ## Some of this stuff should be buried in the production version, and some should be left in a conf.txt file.  Split eventually.

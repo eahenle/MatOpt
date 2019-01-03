@@ -29,6 +29,7 @@ Input specifications:
 	MaxPercent3:	the maximum volume % loading of Dopant3
 	MinPercent4:	the minimum volume % loading of Dopant4
 	MaxPercent4:	the maximum volume % loading of Dopant4
+No non-numeric input.  Lists space-delimited.  Volume % inputs in range [0, 100]
 
 By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
 Console mode can be disabled by setting ENABLECONSOLE = False in InkOptConf.py

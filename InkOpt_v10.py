@@ -36,7 +36,8 @@ iterates the tested percentage by (Max - Min)/DOPSTEP
 
 import sys
 import logging
-import signal
+import signal # ## Needed?  If not... maybe write some good signal handlers? The default behavior is crappy.
+import time
 import tkinter as tk
 from InkOpt import *
 from InkOptConf import *
@@ -52,15 +53,23 @@ loghandle.setFormatter(logging.Formatter(LOGFORMAT))
 log.addHandler(loghandle)
 log.info("Begin main program block")
 
+def _endMain():
+	log.info("The program is exiting. Up-time: {} seconds\n".format(int(time.time() - STARTTIME)))
+	quit()
+
 
 # Main program block
 if __name__ == "__main__":
+
+	# ## Functionalize
+	
+	STARTTIME = time.time()
 
 	# Spin up the Ink Optimizer
 	log.info("Instantiating InkOpt object")
 	inkopt = InkOpt()
 	
-	# GUI Time!  This'll be interesting...
+	# Launch the GUI
 	try:
 		consoleFlag = False # If GUI mode launches, don't enter console mode
 		root = tk.Tk() # Main window
@@ -79,13 +88,18 @@ if __name__ == "__main__":
 	# Run in console mode if GUI mode has errors
 	if not consoleFlag:
 		log.info("Program exit")
-		quit()
+		_endMain()
 		
-	# Console splash
+	# Don't run in console mode if disabled in InkOptConf.py
+	if INTERCONSOLE == DISABLED:
+		log.info("Interactive console mode disabled.")
+		_endMain()
+		
+	# Console splash and program info
 	print(SPLASH)
-	print("©2018 Voxtel, Inc.")
+	print("\n{}\n{}\n{}".format(PROGNAME, LEADDEV, COPYRIGHT))
 	
-	
+	# Get material data from standard file input
 	try:
 		log.info("Reading data from {}".format(INPUTFILE))
 		inkopt.readData(INPUTFILE)
@@ -95,7 +109,7 @@ if __name__ == "__main__":
 	log.info("\nMaterial Data Table:\n", inkopt.getData(), "\n") # Display the imported material data
 	
 	# Check for command line argument (parameter input file)
-	try:
+	try: ## # Change to make this less hacky
 		log.info("Checking for command line argument (parameter input file)")
 		numArgs = len(sys.argv)
 		log.info("Number of arguments: {}".format(numArgs))
@@ -103,12 +117,13 @@ if __name__ == "__main__":
 		log.info("No arguments.")
 		numArgs = 0
 	
+	# Get parameters from file if runtime arg specified; otherwise, get parameters interactively
 	if(numArgs > 1):
 		log.info("Getting parameter input from {}".format(sys.argv[1]))
-		inkopt.setParams(fileInput = sys.argv[1]) # Get parameters from file
+		inkopt.setParams(fileInput = sys.argv[1]) # from file
 	else:
 		log.info("Getting parameters interactively")
-		inkopt.setParams() # Get parameters interactively
+		inkopt.setParams() # interactively
 	
 	log.info("Call InkOpt input validation method")
 	inkopt.validateParams() # Validate parameters
@@ -119,10 +134,11 @@ if __name__ == "__main__":
 	
 	log.info("Parameters:") # Display the specified parameters
 	for key in inkopt.getParams():
-		log.info("\t{}:  {}".format(key, inkopt.getParams()[key])) # Formatting (tab width) issue
+		log.info("\t{}:  {}".format(key, inkopt.getParams()[key])) # ## Formatting (tab width) issue
 	
-	#print("Permutations:\n", inkopt.getOutput("output.txt")) # Print the permutation outputs
-	inkopt.getOutput("output.txt")
+	# Save permutations to file
+	inkopt.getOutput("output.txt") # ## I don't like this implementation.  Also output file should be programmatically generated.
 	
-	log.info("End program.")
+	log.info("End of program.")
+	_endMain()
 	

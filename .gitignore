@@ -3,5 +3,6 @@ output_*.*.csv
 old/*
 __pycache__/*
 .t1
-output.txt
+*.txt
 *.xlsx
+inkoptlog
