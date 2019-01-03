@@ -10,7 +10,7 @@ Provides GUI elements for InkOpt
 import tkinter as tk
 from InkOptConf import *
 from InkOptHelpers import *
-from InkOptParamWindow import ParamWindow
+import InkOptParamWindow
 
 
 class InkOptGUI:
@@ -60,14 +60,14 @@ class InkOptGUI:
 			
 		# MainWindow >> ASCII Splash
 		log.debug("Rendering Main Window >> ASCII splash")
-		MainWindow.splash = tk.Frame(MainWindow)
+		MainWindow.splash = tk.Frame(MainWindow, relief = FRAMERELIEF)
 		MainWindow.splash.pack(side = tk.TOP)
 		MainWindow.splash.art = tk.Label(MainWindow.splash, text=SPLASH)
 		MainWindow.splash.art.pack()
 	
 		# MainWindow >> Button Panel
 		log.debug("Building MainWindow >> Button Panel")
-		MainWindow.buttons = tk.Frame(MainWindow)
+		MainWindow.buttons = tk.Frame(MainWindow, relief = FRAMERELIEF)
 		MainWindow.buttons.pack()
 		
 		# MainWindow >> Button Panel >> Run Button
@@ -95,8 +95,11 @@ class InkOptGUI:
 		"""
 		Wrapper for launching the Parameter Window
 		"""
-		
-		return ParamWindow()
+		ParamWindow = tk.Toplevel()
+		ParamWindow.title("Parameter Window")
+		ParamWindow.frame = InkOptParamWindow.LoadParamWindow(ParamWindow, self.inkopt)
+		ParamWindow.frame.pack()
+		return ParamWindow
 		
 		
 	# ## Fix the return
@@ -141,12 +144,12 @@ class InkOptGUI:
 		log.info("Launching GUI Controls")
 		
 		# ## Think these bits can be lambdalized
+		# ## ...what does the "with" keyword do?
 		
 		# [Re]open the Parameter Window
 		try:
 			if hasattr(self, "ParamWindow"):
 				self.log.debug("Parameter Window already open.")
-				pass
 			else:
 				self.ParamWindow = self.LoadParamWindow()
 				"""log.debug("Parameter Window exists, but is frameless.  Deleting.")
@@ -156,6 +159,7 @@ class InkOptGUI:
 			log.debug("ParameterWindow not open.  Opening.")
 			self.ParamWindow = self.LoadParamWindow()"""
 		except:
+			
 			raise
 		
 		# [Re]open the Data Window

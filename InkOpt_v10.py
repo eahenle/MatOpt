@@ -3,6 +3,8 @@
 InkOpt_v10.py
 Adrian Henle
 Voxtel, Inc.
+
+Launch point for InkOpt v10
 """
 
 
@@ -17,7 +19,7 @@ from InkOpt import *
 from InkOptGUI import *
 
 
-def GUILaunch():
+def GUILaunch(log):
 	"""
 	Launch the GUI
 	"""
@@ -28,11 +30,11 @@ def GUILaunch():
 		GUI = InkOptGUI(root, inkopt)
 		root.mainloop() # Launch the window
 	except tk._tkinter.TclError as e:
-		if ENABLECONSOLE:
-			log.error("{}\nError launching GUI mode.".format(e))
+		log.error("{}".format(e))
+		if INTERCONSOLE == ENABLED:
 			consoleFlag = True
 		else:
-			raise e
+			Quit(log, code = 1, msg = "{}. Is there an X11 display available?".format(e))
 	except Exception as e:
 		raise e
 	return root, GUI, consoleFlag
@@ -102,7 +104,7 @@ if __name__ == "__main__":
 	inkopt = InkOpt()
 	
 	# Launch the GUI
-	root, GUI, consoleFlag = GUILaunch()
+	root, GUI, consoleFlag = GUILaunch(log)
 			
 	# If GUI launches OK, exit program on GUI close.
 	if not consoleFlag:

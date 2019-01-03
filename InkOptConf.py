@@ -10,6 +10,7 @@ Configurations and settings values for InkOpt and InkOptHelpers
 import logging
 import pyfiglet
 import time
+import tkinter as tk
 
 
 # Definitions
@@ -39,6 +40,7 @@ EXITBUTTONTEXT = "Exit"
 EXITBUTTONCOLOR = "red"
 ABOUTBUTTONTEXT = "About"
 PARAMWINDOWTITLE = "Parameter Window"
+FRAMERELIEF = tk.GROOVE
 
 # Algorithm Settings
 MINMATPCT = 20 # Minimum volume percentage of the matrix in a composite

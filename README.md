@@ -13,19 +13,21 @@ combinations with acceptable values are returned to the user in CSV format for v
 spreadsheet software.
 
 <strong>Program Usage</strong><br>
-By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.  Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.
+By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
+Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.
 
 On the console, inputs may be specified interactively or by specifying a parameter input file at runtime.
 Input files must specify parameters in the order shown above. List-type data are entered
 as space-delimited lists on a single line.  Non-numeric inputs are rejected.
 	
-Dopant percentages are permuted with a density of DOPSTEP samples in each range.  I.e., each step
-iterates the tested percentage by (Max - Min)/DOPSTEP.  For testing of algorithms or for surveying many dopants and matrices, DOPSTEP may need to be reduced for the sake of runtime.  DOPSTEP is
-defined in InkOptConf.py, but maybe this should be an input parameter.
+Dopant percentages are permuted with a density of DOPSTEP samples in each range.  I.e., each step iterates the tested percentage
+by (Max - Min)/DOPSTEP.  For testing of algorithms or for surveying many dopants and matrices, DOPSTEP may need to be reduced for
+the sake of runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should be an input parameter.
 
 <strong>Input Specifications</strong><br>
-When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the console, do it that way (<i>seriously</i>).  When passing input in a file,
-etc. (<i>seriously.</i>)  No non-numeric input.  Lists space-delimited.  Volume % inputs in range [0, 100].
+When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the console, do
+it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  No non-numeric input.  Lists are space-
+delimited.  Volume % inputs in range [0, 100].
 <ul>
 <u>Input Variables</u>
 	<li>Matrix1:		a list of matrix materials from the data table</li>
@@ -49,10 +51,10 @@ etc. (<i>seriously.</i>)  No non-numeric input.  Lists space-delimited.  Volume 
 
 <strong>Future Features (maybe</strong>)
 <ul>
-	<li>Generation of massive CSV or SQL databases (minimal end-user compute time for finding good formulations with complex requirements)</li>
+	<li>Generation of massive CSV or SQL databases (less user CPU time for finding good, complex, precise formulations)</li>
 	<li>Training and application of predictive modeling for ultra-fast screening</li>
-	<li>Handling of empty string for co-dopants.  There is no way to leave this input blank, which may be inappropriate for some use cases.</li>
-	<li>Parallelization (this first, I think. Do with the threading package, 'cause at least I know it's compatible with logging)</li>
+	<li>Handling of empty string for co-dopants.  Input cannot be blank, which may be inappropriate for some use cases.</li>
+	<li>Parallelization (Priority. Do with the threading package, 'cause at least I know it's compatible with logging)</li>
 	<li>Execution time estimation</li>
 	<li>Background processing (safe UI exit w/ background conclusion of data task)</li>
 	<li>Better documentation!</li>
