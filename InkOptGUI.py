@@ -110,9 +110,8 @@ class InkOptGUI:
 		
 		DataWindow = tk.Toplevel() # ## Change this to store the toplevel objects as a list of Tk nodes
 		DataWindow.title("Data Table Window")
-		DataWindow.frame = tk.Frame(DataWindow, width = SMALLWINDOWX, height = SMALLWINDOWY)
+		DataWindow.frame = InkOptDataWindow.LoadDataWindow(DataWindow, self.inkopt)
 		DataWindow.frame.pack()
-		
 		return DataWindow
 		
 		
@@ -130,7 +129,6 @@ class InkOptGUI:
 		PermuteWindow.frame = tk.Frame(PermuteWindow)
 		PermuteWindow.frame.pack()
 		# ## Permutation Window should update InkOpt data and params with Data and Permutation Window field values before run
-		
 		return PermuteWindow
 		
 		

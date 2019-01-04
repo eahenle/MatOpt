@@ -10,7 +10,7 @@ from InkOptHelpers import *
 # ## Future home of the code for the Parameter Window
 # ## May need to pass in Tk node, return ParamWindow frame
 
-def loadParams(log, inkopt, frame):
+def loadParams(log, inkopt, ParamWindow):
 	"""
 	Trigger the InkOpt engine to read input parameters from the input file indicated in the Parameter Window.
 	Populate Parameter Window fields with values from input.
@@ -19,30 +19,30 @@ def loadParams(log, inkopt, frame):
 	log.debug("Entering loadParams()")
 	
 	# Get parameters from input file via InkOpt.setParams()
-	log.debug("Getting parameters from {}".format(frame.loadframe.inputfile.get()))
-	inkopt.setParams(frame.loadframe.inputfile.get())
+	log.debug("Getting parameters from {}".format(ParamWindow.loadframe.inputfile.get()))
+	inkopt.setParams(ParamWindow.loadframe.inputfile.get())
 	log.debug("Parameters:\n{}\n".format(*inkopt.params))
 	
 	# List of Parameter Window fields
 	params = {
-		"maxDiffPdfs" : frame.paramframe.maxDiffPdfs,
-		"maxPDf" : frame.paramframe.maxPDf,
-		"minVgrin" : frame.paramframe.minVgrin,
-		"minDnAvg" : frame.paramframe.minDnAvg,
-		"matrix1" : frame.paramframe.matrix1,
-		"matrix2" : frame.paramframe.matrix2,
-		"dopant1" : frame.paramframe.dopant1,
-		"dopant2" : frame.paramframe.dopant2,
-		"dopant3" : frame.paramframe.dopant3,
-		"dopant4" : frame.paramframe.dopant4,
-		"d1min" : frame.paramframe.d1min,
-		"d1max" : frame.paramframe.d1max,
-		"d2min" : frame.paramframe.d2min,
-		"d2max" : frame.paramframe.d2max,
-		"d3min" : frame.paramframe.d3min,
-		"d3max" : frame.paramframe.d3max,
-		"d4min" : frame.paramframe.d4min,
-		"d4max" : frame.paramframe.d4max
+		"maxDiffPdfs" : ParamWindow.paramframe.maxDiffPdfs,
+		"maxPDf" : ParamWindow.paramframe.maxPDf,
+		"minVgrin" : ParamWindow.paramframe.minVgrin,
+		"minDnAvg" : ParamWindow.paramframe.minDnAvg,
+		"matrix1" : ParamWindow.paramframe.matrix1,
+		"matrix2" : ParamWindow.paramframe.matrix2,
+		"dopant1" : ParamWindow.paramframe.dopant1,
+		"dopant2" : ParamWindow.paramframe.dopant2,
+		"dopant3" : ParamWindow.paramframe.dopant3,
+		"dopant4" : ParamWindow.paramframe.dopant4,
+		"d1min" : ParamWindow.paramframe.d1min,
+		"d1max" : ParamWindow.paramframe.d1max,
+		"d2min" : ParamWindow.paramframe.d2min,
+		"d2max" : ParamWindow.paramframe.d2max,
+		"d3min" : ParamWindow.paramframe.d3min,
+		"d3max" : ParamWindow.paramframe.d3max,
+		"d4min" : ParamWindow.paramframe.d4min,
+		"d4max" : ParamWindow.paramframe.d4max
 	}
 	
 	log.debug("ParamWindow.params.items():\n{}\n".format(params.items()))
@@ -61,10 +61,10 @@ def loadParams(log, inkopt, frame):
 		param[1].value.insert(0, param[1].var.get())
 	
 	log.debug("paramframe.*.var: {}\n".format([
-		frame.paramframe.maxDiffPdfs.var.get(),
-		frame.paramframe.maxPDf.var.get(),
+		ParamWindow.paramframe.maxDiffPdfs.var.get(),
+		ParamWindow.paramframe.maxPDf.var.get(),
 		"...",
-		frame.paramframe.d4max.var.get()
+		ParamWindow.paramframe.d4max.var.get()
 		]))
 	log.debug("inkopt.params: {}\n".format([
 		*inkopt.params["maxDiffPdfs"],
@@ -73,28 +73,51 @@ def loadParams(log, inkopt, frame):
 		"...",
 		*inkopt.params["d4max"]
 		]))
+		
+		
+def PackLoadFrame(master, inkopt, log):
+	"""
+	
+	"""
+	loadframe = tk.Frame(master)
+	loadframe.pack(side = tk.TOP)
+	loadframe.loadbutton = tk.Button(loadframe, text = "Load", command = lambda: loadParams(log, inkopt, master))
+	loadframe.loadbutton.pack(side = tk.LEFT)
+	loadframe.inputfile = tk.StringVar()
+	loadframe.inputfile.set("input.txt")
+	loadframe.inputfield = tk.Entry(loadframe, text = loadframe.inputfile.get(), textvariable = loadframe.inputfile)
+	loadframe.inputfield.pack(side = tk.RIGHT)
+	return loadframe
+	
+	
+	
+def PackParamWindowFrame(master):
+	"""
+	
+	"""
+	
+	frame = tk.Frame(master, relief = FRAMERELIEF)
+	frame.pack()
+	frame.widthprop = tk.Frame(frame, width = SMALLWINDOWX, height = 0, relief = FRAMERELIEF)
+	frame.widthprop.pack(side = tk.TOP)
+	return frame
 	
 	
 def LoadParamWindow(master, inkopt):
+	"""
 	
-# Build the window frame
+	"""
+	
 	log = startLog(__name__)
 	log.debug("Building ParameterWindow")
-	frame = tk.Frame(master, relief = FRAMERELIEF)
-	frame.pack()
-	frame.widthprop = tk.Frame(frame, width = SMALLWINDOWX, height = 5, relief = FRAMERELIEF)
-	frame.widthprop.pack(side = tk.TOP)
+	
+	# Build the window frame
+	frame = PackParamWindowFrame(master)
 	
 	# Define the frame for loading from file
-	frame.loadframe = tk.Frame(frame)
-	frame.loadframe.pack(side = tk.TOP)
-	frame.loadframe.loadbutton = tk.Button(frame.loadframe, text = "Load", command = lambda: loadParams(log, inkopt, frame))
-	frame.loadframe.loadbutton.pack(side = tk.LEFT)
-	frame.loadframe.inputfile = tk.StringVar()
-	frame.loadframe.inputfile.set("input.txt")
-	frame.loadframe.inputfield = tk.Entry(frame.loadframe,
-		text = frame.loadframe.inputfile.get(), textvariable = frame.loadframe.inputfile)
-	frame.loadframe.inputfield.pack(side = tk.RIGHT)
+	frame.loadframe = PackLoadFrame(frame, inkopt, log)
+	
+	
 	
 	# Define the frame for viewing loaded parameters
 	frame.paramframe = tk.Frame(frame)
