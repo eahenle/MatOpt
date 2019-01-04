@@ -17,11 +17,13 @@ To open on the command line, use one of these:
 <ul>
 	<li>./InkOpt_v10.py <i>(Unix)</i></li>
 	<li>./runInkOpt.sh <i>(Unix)</i></li>
-	<li>[python 3 with Tkinter, Pandas, and Numpy] InkOpt_v10.py <i>(Unix and Windows)</i></li>
+	<li>python3 InkOpt_v10.py <i>(Unix and Windows)</i></li>
 	<li>./runInkOpt.bat <i>(Windows)</i></li>
 </ul>
 runInkOpt.sh may be usable as a double-clickable program launcher in Unix/Linux/Mac OS.
 runInkOpt.bat may be usable as a double-clickable program launcher in Windows.
+
+Python must be installed on the system.  Required packages are installed automatically.
 
 By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
 Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.

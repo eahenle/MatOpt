@@ -93,7 +93,7 @@ def PackLoadFrame(master, inkopt, log):
 	
 def PackParamWindowFrame(master):
 	"""
-	
+	Pack and prop the Param Window
 	"""
 	
 	frame = tk.Frame(master, relief = FRAMERELIEF)
@@ -112,7 +112,7 @@ def PackParamWindowFrame(master):
 	
 def LoadParamWindow(master, inkopt):
 	"""
-	
+	Build the Parameter Window
 	"""
 	
 	log = startLog(__name__)

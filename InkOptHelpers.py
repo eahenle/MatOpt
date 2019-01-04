@@ -22,6 +22,28 @@ except:
 		import numpy
 	except:
 		raise
+		
+		
+def TkFrame(master):
+	"""
+	Generates a tk.Frame under the given master frame and pack it
+	"""
+	
+	frame = tk.Frame(master, relief = FRAMERELIEF)
+	frame.pack()
+	
+	return frame
+	
+	
+def WidthProp(master, width = SMALLWINDOWX, side = tk.TOP):
+	"""
+	Generates a tk.Frame for propping a window open to a minimum width
+	"""
+	
+	prop = tk.Frame(master, width = width, relief = FRAMERELIEF)
+	prop.pack(side = side)
+	
+	return prop
 
 
 # ## Improve by handling INFO and ERROR logging in a StreamHandler, and DEBUG logging in a FileHandler

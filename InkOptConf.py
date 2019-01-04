@@ -11,6 +11,7 @@ import time
 import logging
 import sys
 
+# ## This should probably be moved to an installer program.
 import subprocess
 def Install(module):
 	"""
@@ -51,7 +52,6 @@ except:
 	raise
 
 
-
 # Definitions
 ENABLED = True
 DISABLED = False
@@ -61,10 +61,11 @@ INTERCONSOLE = DISABLED
 
 # General Constants
 PROGNAME = "VoxtelNano Ink Optimizer"
-VERSION = 10.17 # Version number
+VERSION = 10.18 # Version number
 COPYRIGHT = "©2019 Voxtel, Inc."
 LEADDEV = "Adrian Henle"
 ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)
+# ## This renders well in Unix, poorly in Windows.  Replace with JPEG in a tk.Canvas?
 SPLASH = pyfiglet.figlet_format("InkOpt v{}".format(VERSION))
 INPUTFILE = "material_table.csv" # Default input file for material propertie
 
@@ -97,8 +98,9 @@ else:
 	LOGLEVEL = logging.DEBUG
 	
 # Output formatting string for logging handlers
-LOGFORMAT = "%(asctime)s %(name)s|%(levelname)s %(message)s"
+LOGFORMAT = "%(asctime)s|%(name)s|%(levelname)s: %(message)s"
 
 # ## Some of this stuff should be buried in the production version, and some should be left in a conf.txt file.  Split eventually.
 
+# ## Mark the start time of the program run.  This is definitely not the place to do this.
 STARTTIME = time.time()

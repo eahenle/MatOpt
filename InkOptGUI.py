@@ -117,6 +117,7 @@ class InkOptGUI:
 		DataWindow.frame = InkOptDataWindow.LoadDataWindow(DataWindow, self.inkopt)
 		DataWindow.frame.pack()
 		
+		# ## Are these being assigned somewhere?
 		return DataWindow
 		
 		
