@@ -8,15 +8,15 @@ Launch point for InkOpt v10
 """
 
 
-import sys
-import logging
-import signal
-import time
-import tkinter as tk
 from InkOptConf import *
 from InkOptHelpers import *
 from InkOpt import *
 from InkOptGUI import *
+import sys
+import logging
+# ## import signal
+import time
+import tkinter as tk
 
 
 def GUILaunch(log):
@@ -114,12 +114,12 @@ if __name__ == "__main__":
 	# Don't run in console mode if disabled in InkOptConf.py
 	if INTERCONSOLE == DISABLED:
 		log.info("Interactive console mode disabled.")
-		_endMain()
+		Quit(log)
 		
 	# Run in console mode if GUI mode has errors
 	interConsole(inkopt, sys.argv, log)
 		
 	# End of program
 	log.info("End of program.")
-	_endMain()
+	Quit(log)
 	

@@ -13,6 +13,16 @@ combinations with acceptable values are returned to the user in CSV format for v
 spreadsheet software.
 
 <strong>Program Usage</strong><br>
+To open on the command line, use one of these:
+<ul>
+	<li>./InkOpt_v10.py <i>(Unix)</i></li>
+	<li>./runInkOpt.sh <i>(Unix)</i></li>
+	<li>[python 3 with Tkinter, Pandas, and Numpy] InkOpt_v10.py <i>(Unix and Windows)</i></li>
+	<li>./runInkOpt.bat <i>(Windows)</i></li>
+</ul>
+runInkOpt.sh may be usable as a double-clickable program launcher in Unix/Linux/Mac OS.
+runInkOpt.bat may be usable as a double-clickable program launcher in Windows.
+
 By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
 Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.
 
@@ -26,7 +36,7 @@ the sake of runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should
 
 <strong>Input Specifications</strong><br>
 When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the console, do
-it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  No non-numeric input.  Lists are space-
+it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  Numeric input only.  Lists are space-
 delimited.  Volume % inputs in range [0, 100].
 <ul>
 <u>Input Variables</u>

@@ -8,11 +8,20 @@ Helper functions for InkOpt
 
 # ## Check dependencies for redundancies
 # ## see about the right way to use packages...
-import numpy as np
+from InkOptConf import *
+
 import logging
 import time
 import sys
-from InkOptConf import *
+
+try:
+	import numpy as np
+except:
+	try:
+		Install("numpy")
+		import numpy
+	except:
+		raise
 
 
 # ## Improve by handling INFO and ERROR logging in a StreamHandler, and DEBUG logging in a FileHandler
@@ -95,7 +104,7 @@ def calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct, dopant3, d3pct, do
 	if(mat1pct < MINMATPCT or mat2pct < MINMATPCT):
 		return Dn
 	
-	for wavelength in [*Dn]: # This could be made more elegant with a lambda
+	for wavelength in [*Dn]: # ## This could be made more elegant with a lambda
 		Dn[wavelength] = np.float64(
 			data.iloc[dopant1.astype(int)]["n({} nm)".format(wavelength)] * d1pct / 100
 			+ data.iloc[dopant2.astype(int)]["n({} nm)".format(wavelength)] * d2pct / 100

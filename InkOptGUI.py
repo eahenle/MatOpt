@@ -11,6 +11,8 @@ import tkinter as tk
 from InkOptConf import *
 from InkOptHelpers import *
 import InkOptParamWindow
+import InkOptDataWindow
+import InkOptPermuteWindow
 
 
 class InkOptGUI:
@@ -18,11 +20,12 @@ class InkOptGUI:
 	The root interface (main window) for InkOpt's GUI
 	"""
 	
-	
+
 	def Quit(self):
 		"""
 		Callback wrapper for InkOptHelpers.Quit()
 		"""
+		
 		Quit(self.log)
 	
 	
@@ -99,6 +102,7 @@ class InkOptGUI:
 		ParamWindow.title("Parameter Window")
 		ParamWindow.frame = InkOptParamWindow.LoadParamWindow(ParamWindow, self.inkopt)
 		ParamWindow.frame.pack()
+		
 		return ParamWindow
 		
 		
@@ -112,6 +116,7 @@ class InkOptGUI:
 		DataWindow.title("Data Table Window")
 		DataWindow.frame = InkOptDataWindow.LoadDataWindow(DataWindow, self.inkopt)
 		DataWindow.frame.pack()
+		
 		return DataWindow
 		
 		
@@ -128,6 +133,7 @@ class InkOptGUI:
 		PermuteWindow.title("Permutation Window")
 		PermuteWindow.frame = tk.Frame(PermuteWindow)
 		PermuteWindow.frame.pack()
+		
 		# ## Permutation Window should update InkOpt data and params with Data and Permutation Window field values before run
 		return PermuteWindow
 		

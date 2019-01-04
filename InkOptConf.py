@@ -7,10 +7,49 @@ Configurations and settings values for InkOpt and InkOptHelpers
 """
 
 
-import logging
-import pyfiglet
 import time
-import tkinter as tk
+import logging
+import sys
+
+import subprocess
+def Install(module):
+	"""
+	
+	"""
+	
+	try:
+		subprocess.call([sys.executable, "-m", "pip", "install", module])
+	except:
+		raise
+
+try:
+	import pyfiglet
+except Exception:
+	try:
+		Install("pyfiglet")
+		import pyfiglet
+	except:
+		raise
+except:
+	raise
+
+try:
+	import tkinter as tk
+except Exception:
+	try:
+		Install("tkinter")
+		import tkinter
+	except Exception:
+		try:
+			Install("Tkinter")
+			import tkinter
+		except:
+			raise
+	except:
+		raise
+except:
+	raise
+
 
 
 # Definitions

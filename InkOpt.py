@@ -7,12 +7,22 @@ InkOpt class definition.
 """
 
 
-import time
-import pandas as pd
-import numpy as np
-import logging
-from InkOptHelpers import *
 from InkOptConf import *
+from InkOptHelpers import *
+
+import time
+import logging
+
+try:
+	import pandas as pd
+except:
+	try:
+		Install("pandas")
+		import pandas as pd
+	except:
+		raise
+		
+import numpy as np
 
 
 class InkOpt():
