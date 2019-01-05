@@ -49,12 +49,10 @@ class InkOptGUI:
 		
 	
 	# ## Functionalize
-	def MainWindow(self, tkroot = None, log = None):
+	def MainWindow(self, tkroot, log):
 		"""
 		The Main Window GUI launcher
 		"""
-		
-		# ## Add clever input plasticizer
 		
 		# Frame the Main Window
 		log.debug("Building MainWindow")
