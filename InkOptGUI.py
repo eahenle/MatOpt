@@ -132,7 +132,7 @@ class InkOptGUI:
 		
 		PermuteWindow = tk.Toplevel() # ## Change this to store the toplevel objects as a list of Tk nodes
 		PermuteWindow.title("Permutation Window")
-		PermuteWindow.frame = tk.Frame(PermuteWindow)
+		PermuteWindow.frame = InkOptPermuteWindow.LoadPermuteWindow(PermuteWindow, self.inkopt)
 		PermuteWindow.frame.pack()
 		
 		# ## Permutation Window should update InkOpt data and params with Data and Permutation Window field values before run
@@ -151,51 +151,32 @@ class InkOptGUI:
 		# ## Think these bits can be lambdalized
 		# ## ...what does the "with" keyword do?
 		
-		# [Re]open the Parameter Window
+		# Open the Parameter Window
 		try:
 			if hasattr(self, "ParamWindow"):
 				self.log.debug("Parameter Window already open.")
 			else:
 				self.ParamWindow = self.LoadParamWindow()
-				"""log.debug("Parameter Window exists, but is frameless.  Deleting.")
-				self.ParamWindow.destroy()
-				self.ParamWindow = self.LoadParamWindow()
-		except AttributeError:
-			log.debug("ParameterWindow not open.  Opening.")
-			self.ParamWindow = self.LoadParamWindow()"""
 		except:
-			
 			raise
 		
-		# [Re]open the Data Window
+		# Open the Data Window
 		try:
 			if hasattr(self, "DataWindow"):
 				log.debug("Data Window already open.")
 				pass
 			else:
 				self.DataWindow = self.LoadDataWindow()
-				"""log.debug("Data Window already exists, but is frameless.  Deleting.")
-				self.DataWindow.destroy()
-				self.DataWindow = self.LoadDataWindow()
-		except AttributeError:
-			log.debug("DataWindow not open.  Opening.")
-			self.DataWindow = self.LoadDataWindow()"""
 		except:
 			raise
 		
-		# [Re]open the Permutation Window
+		# Open the Permutation Window
 		try:
 			if hasattr(self, "PermuteWindow"):
 				log.debug("Permutation Window already open.")
 				pass
 			else:
 				self.PermuteWindow = self.LoadPermuteWindow()
-				"""log.debug("Permutation Window already exists, but is frameless.  Deleting.")
-				self.PermuteWindow.destroy()
-				self.PermuteWindow = self.LoadPermuteWindow()
-		except AttributeError:
-			log.debug("PermuteWindow not open.  Opening.")
-			self.PermuteWindow = self.LoadPermuteWindow()"""
 		except:
 			raise
 		

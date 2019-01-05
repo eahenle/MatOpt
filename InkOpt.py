@@ -64,6 +64,8 @@ class InkOpt():
 			self.data = pd.read_csv(input, header = None)
 		self.log.info("Read input from {}:\n{}".format(input, self.data))
 		
+		self.data.columns = ["Material", "n(486 nm)", "n(587 nm)", "n(656 nm)"]
+		
 		return self.data
 		
 		
@@ -239,12 +241,12 @@ class InkOpt():
 				for dopant1 in self.params["dopant1"]:
 					for dopant2 in self.params["dopant2"]:
 						if dopant1 == dopant2:
-							log.debug("Skipping redundant combinations")
+							self.log.debug("Skipping redundant combinations")
 							continue
 						for dopant3 in self.params["dopant3"]:
 							for dopant4 in self.params["dopant4"]:
 								if dopant3 == dopant4:
-									log.debug("Skipping redundant combinations")
+									self.log.debug("Skipping redundant combinations")
 									continue
 								for d1pct in np.linspace(self.params["d1min"][0], self.params["d1max"][0], num = DOPSTEP):
 									if 100 - d1pct < MINMATPCT:
@@ -277,10 +279,11 @@ class InkOpt():
 												self.log.debug("Dn average OK")
 												
 												# Calculate Pdfs and check against maxDiffPdfs
-												if(abs(
+												diffPdfs = abs(
 													calcPdf(matrix1, dopant1, d1pct, dopant2, d2pct, self.data)
 													- calcPdf(matrix2, dopant3, d3pct, dopant4, d4pct, self.data)
-													) > self.params["maxDiffPdfs"]):
+												)
+												if(diffPdfs > self.params["maxDiffPdfs"]):
 													self.log.debug("Pdf difference too great")
 													continue
 												self.log.debug("Pdf difference OK")
@@ -312,7 +315,10 @@ class InkOpt():
 													d1pct,
 													d2pct,
 													d3pct,
-													d4pct
+													d4pct,
+													diffPdfs,
+													PDf,
+													Vgrin
 												])
 		
 		

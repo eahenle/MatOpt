@@ -7,6 +7,9 @@ Configurations and settings values for InkOpt and InkOptHelpers
 """
 
 
+# ## This code is a mess.
+
+
 import time
 import logging
 import sys
@@ -61,7 +64,7 @@ INTERCONSOLE = DISABLED
 
 # General Constants
 PROGNAME = "VoxtelNano Ink Optimizer"
-VERSION = 10.18 # Version number
+VERSION = 10.19 # Version number
 COPYRIGHT = "©2019 Voxtel, Inc."
 LEADDEV = "Adrian Henle"
 ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)

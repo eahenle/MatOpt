@@ -21,25 +21,32 @@ To open on the command line, use one of these:
 	<li>./runInkOpt.bat <i>(Windows)</i></li>
 </ul>
 runInkOpt.sh may be usable as a double-clickable program launcher in Unix/Linux/Mac OS.
-runInkOpt.bat may be usable as a double-clickable program launcher in Windows.
+runInkOpt.bat is usable as a double-clickable program launcher in Windows.
 
 Python must be installed on the system.  Required packages are installed automatically.
 
 By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
 Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.
 
+In GUI mode, load parameters and material data from file inputs in the appropriate windows.
+The values will be filled in to text fields in the windows.
+Future versions will include the ability to edit these fields and have the field values be read back in before permutation
+algoithms are run.
+After loading, press GO in the Permutation Window.
+
 On the console, inputs may be specified interactively or by specifying a parameter input file at runtime.
 Input files must specify parameters in the order shown above. List-type data are entered
 as space-delimited lists on a single line.  Non-numeric inputs are rejected.
 	
-Dopant percentages are permuted with a density of DOPSTEP samples in each range.  I.e., each step iterates the tested percentage
-by (Max - Min)/DOPSTEP.  For testing of algorithms or for surveying many dopants and matrices, DOPSTEP may need to be reduced for
-the sake of runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should be an input parameter.
+Dopant percentages are permuted with a density of DOPSTEP samples in each range.
+I.e., each step iterates the tested percentage by (Max - Min)/DOPSTEP.
+For testing of algorithms or for surveying many dopants and matrices, DOPSTEP may need to be reduced for the sake of
+runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should be an input parameter.
 
 <strong>Input Specifications</strong><br>
-When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the console, do
-it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  Numeric input only.  Lists are space-
-delimited.  Volume % inputs in range [0, 100].
+When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the 
+console, do it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  Numeric input only. 
+Lists are space-delimited.  Volume % inputs in range [0, 100].
 <ul>
 <u>Input Variables</u>
 	<li>Matrix1:		a list of matrix materials from the data table</li>

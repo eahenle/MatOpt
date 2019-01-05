@@ -135,7 +135,7 @@ def calcDns(matrix1, matrix2, dopant1, d1pct, dopant2, d2pct, dopant3, d3pct, do
 			- data.iloc[dopant4.astype(int)]["n({} nm)".format(wavelength)] * d4pct / 100
 			- data.iloc[matrix2.astype(int)]["n({} nm)".format(wavelength)] * mat2pct / 100
 		)
-	log.debug("Calculated Dns")
+	#log.debug("Calculated Dns")
 	return Dn			
 	
 	
@@ -146,8 +146,8 @@ def calcPdf(matrix, dopant1, d1pct, dopant2, d2pct, data):
 	Returns an np.float64
 	"""
 	matrix, dopant1, dopant2 = int(matrix), int(dopant1), int(dopant2)
-	log.debug("Calculating Pdf for {} with {} ({}%) and {} ({}%)".format(
-		data.iloc[matrix]["Material"], data.iloc[dopant1]["Material"], d1pct, data.iloc[dopant2]["Material"], d2pct))
+	#log.debug("Calculating Pdf for {} with {} ({}%) and {} ({}%)".format(
+	#	data.iloc[matrix]["Material"], data.iloc[dopant1]["Material"], d1pct, data.iloc[dopant2]["Material"], d2pct))
 	return np.float64(
 		(data.iloc[dopant1]["n(587 nm)"] * d1pct / 100
 		+ data.iloc[dopant2]["n(587 nm)"] * d2pct / 100
