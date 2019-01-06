@@ -23,6 +23,7 @@ def GOButton(inkopt):
 	
 	"""
 	
+	inkopt.validateParams()
 	inkopt.permuteV7()
 	inkopt.getOutput(inkopt.outputfile)
 	

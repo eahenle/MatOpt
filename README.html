@@ -1,21 +1,33 @@
-<center>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="MarkdownViewer++" />
+        <title>README.md</title>
+        <style type="text/css">
+            
+/* Avoid page breaks inside the most common attributes, especially for exports (i.e. PDF) */
+td, h1, h2, h3, h4, h5, p, ul, ol, li {
+    page-break-inside: avoid; 
+}
+
+        </style>
+      </head>
+    <body>
+        <center>
 <img src = logo.png></img>
 <h1>InkOpt version 10</h1>
-
 <h4><i>Written by Adrian Henle, based on InkOpt_lite_inter_v7.py</i></h4>
-
 <h3>CONFIDENTIAL PROPERTY OF VOXTEL, INC.</h3>
-
-************************ A program to generate ink formulations. ************************</center>
-
-<strong> Description </strong><br>
+<p>************************ A program to generate ink formulations. ************************</center></p>
+<p><strong> Description </strong><br>
 Each formulation is based on inputs of two lists of matrices and two lists of dopants.  Potential
 formulations are probed for calculated parameters relevant to GRIN optics, and material
 combinations with acceptable values are returned to the user in CSV format for viewing in
-spreadsheet software.
-
-<strong> Program Usage </strong><br>
-To open on the command line, use one of these:
+spreadsheet software.</p>
+<p><strong> Program Usage </strong><br>
+To open on the command line, use one of these:</p>
 <ul>
 	<li> ./InkOpt_v10.py <i> (Unix) </i> </li>
 	<li> ./runInkOpt.sh <i> (Unix) </i> </li>
@@ -24,32 +36,26 @@ To open on the command line, use one of these:
 </ul>
 runInkOpt.sh may be usable as a double-clickable program launcher in Unix/Linux/Mac OS.
 runInkOpt.bat is usable as a double-clickable program launcher in Windows.
-
-Python must be installed on the system.  Required packages are installed automatically.
-
-By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
-Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.
-
-In GUI mode, load parameters and material data from file inputs in the appropriate windows.
+<p>Python must be installed on the system.  Required packages are installed automatically.</p>
+<p>By default, the program attempts to open in GUI mode with Tkinter.  If this fails, the console mode will execute.
+Console mode can be disabled by setting INTERCONSOLE = DISABLED in InkOptConf.py.</p>
+<p>In GUI mode, load parameters and material data from file inputs in the appropriate windows.
 The values will be filled in to text fields in the windows.
 Future versions will include the ability to edit these fields and have the field values be read back in before permutation
 algoithms are run.
-After loading, press GO in the Permutation Window.
-
-On the console, inputs may be specified interactively or by specifying a parameter input file at runtime.
+After loading, press GO in the Permutation Window.</p>
+<p>On the console, inputs may be specified interactively or by specifying a parameter input file at runtime.
 Input files must specify parameters in the order shown above. List-type data are entered
-as space-delimited lists on a single line.  Non-numeric inputs are rejected.
-	
-Dopant percentages are permuted with a density of DOPSTEP samples in each range.
+as space-delimited lists on a single line.  Non-numeric inputs are rejected.</p>
+<p>Dopant percentages are permuted with a density of DOPSTEP samples in each range.
 I.e., each step iterates the tested percentage by (Max - Min)/DOPSTEP.
 For testing of algorithms or for surveying many dopants and matrices, DOPSTEP may need to be reduced for the sake of
-runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should be an input parameter.
-
-<strong> Input Specifications </strong>
+runtime.  DOPSTEP is defined in InkOptConf.py, but maybe this should be an input parameter.</p>
+<p><strong> Input Specifications </strong>
 <br>
-When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the 
-console, do it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  Numeric input only. 
-Lists are space-delimited.  Volume % inputs in range [0, 100].
+When taking input from the GUI, do it that way (<i>describe this better</i>).  When taking input interactively in the
+console, do it that way (<i>seriously</i>).  When passing input in a file, etc. (<i>seriously.</i>)  Numeric input only.
+Lists are space-delimited.  Volume % inputs in range [0, 100].</p>
 <ul>
 <u> Input Variables </u>
 	<li> Matrix1:		a list of matrix materials from the data table </li>
@@ -70,13 +76,9 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].
 	<li> MinPercent4:	the minimum volume % loading of Dopant4 </li>
 	<li> MaxPercent4:	the maximum volume % loading of Dopant4 </li>
 </ul>
-
-<strong> Development </strong>
-
-
-Version 10.19
-
-<u> Bugs by Priority </u>
+<p><strong> Development </strong></p>
+<p>Version 10.19</p>
+<p><u> Bugs by Priority </u></p>
 <ul>
 <u> Priority 1 </u>
 	<li> Algorithm has not been validated against previous full implementation! </li>
@@ -128,9 +130,7 @@ Version 10.19
 	</li>
 </ul>
 <br>
-
-<u> Future Features by Priority </u>
-
+<p><u> Future Features by Priority </u></p>
 <ul>
 	<u> Priority 1 </u>
 	
@@ -165,13 +165,15 @@ Version 10.19
 	<li> GUI input parameter validation update to non-crashing version </li>
 </ul>
 <br>
-
-<u>Curiosities (Not Necessarily Related)</u>
+<p><u>Curiosities (Not Necessarily Related)</u></p>
 <ul>
 	<li> Write a lambda to leave something alone unless it's None; if None, set to a new value </li>
 	<li> Use try/except on only the definition expression of a function (flexible function defs) </li>
 	<li> What is the power of the "with" keyword? </li>
 </ul>
 <br>
-
 <br>
+
+    </body>
+</html>
+            

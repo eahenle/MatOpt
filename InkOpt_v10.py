@@ -85,7 +85,7 @@ def interConsole(inkopt, sysargs, log):
 		log.info("\t{}:  {}".format(key, inkopt.getParams()[key])) # ## Formatting (tab width) issue
 	
 	# Save permutations to file
-	inkopt.getOutput("output.txt") # ## I don't like this implementation.  Also output file should be programmatically generated.
+	inkopt.getOutput(inkopt.outputfile)
 	
 
 # Main program block

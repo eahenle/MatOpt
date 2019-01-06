@@ -64,7 +64,7 @@ INTERCONSOLE = DISABLED
 
 # General Constants
 PROGNAME = "VoxtelNano Ink Optimizer"
-VERSION = 10.21 # Version number
+VERSION = 10.22 # Version number
 COPYRIGHT = "©2019 Voxtel, Inc."
 LEADDEV = "Adrian Henle"
 ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)
