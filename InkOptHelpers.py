@@ -13,15 +13,7 @@ from InkOptConf import *
 import logging
 import time
 import sys
-
-try:
-	import numpy as np
-except:
-	try:
-		Install("numpy")
-		import numpy
-	except:
-		raise
+import numpy as np
 		
 		
 def TkFrame(master):
