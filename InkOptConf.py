@@ -70,6 +70,7 @@ LEADDEV = "Adrian Henle"
 ABOUT = "{} v{}\n\n{}\n\n{}\n".format(PROGNAME, VERSION, LEADDEV, COPYRIGHT)
 # ## This renders well in Unix, poorly in Windows.  Replace with JPEG in a tk.Canvas?
 SPLASH = pyfiglet.figlet_format("InkOpt v{}".format(VERSION))
+LOGO = "logo.png"
 INPUTFILE = "material_table.csv" # Default input file for material propertie
 
 # GUI Settings

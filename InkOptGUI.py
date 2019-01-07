@@ -59,12 +59,18 @@ class InkOptGUI:
 		MainWindow = tk.Frame(tkroot)
 		MainWindow.pack()
 			
-		# MainWindow >> ASCII Splash
+		"""# MainWindow >> ASCII Splash
 		log.debug("Rendering Main Window >> ASCII splash")
 		MainWindow.splash = tk.Frame(MainWindow, relief = FRAMERELIEF)
 		MainWindow.splash.pack(side = tk.TOP)
 		MainWindow.splash.art = tk.Label(MainWindow.splash, text=SPLASH)
-		MainWindow.splash.art.pack()
+		MainWindow.splash.art.pack()"""
+		# MainWindow >> Logo
+		log.debug("Rendering Main Window >> Logo")
+		MainWindow.logoframe = TkFrame(MainWindow)
+		MainWindow.logoframe.logoPhotoImage = tk.PhotoImage(file = LOGO)
+		MainWindow.logoframe.logoLabel = tk.Label(MainWindow.logoframe, image = MainWindow.logoframe.logoPhotoImage)
+		MainWindow.logoframe.logoLabel.pack()
 	
 		# MainWindow >> Button Panel
 		log.debug("Building MainWindow >> Button Panel")

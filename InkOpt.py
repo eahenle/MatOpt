@@ -320,22 +320,29 @@ class InkOpt():
 													PDf,
 													Vgrin
 												])
+			
+			# Record successful permutations to DataFrame
+			self.log.info("Writing output list to Pandas DataFrame")
+			from pathlib import Path # ## Put this where it belongs.
+			self.outputfile = self.outputfile if not Path(self.outputfile).is_file() else "output_{}.csv".format(time.time())
+			self.outputdf = pd.Dataframe(self.output)
+			self.outputdf.columns = ["matrix1", "matrix2", "dopant1", "dopant2", "dopant3", "dopant4", "d1pct", "d2pct", "d3pct", "d4pct", "diffPdfs", "PDf", "Vgrin"]
+			
+			return self.outputdf
 		
 		
 	def getOutput(self, writeToFile = None):
 		"""
-		Return the output of the permutation and testing algorithms.  Write to a file if a file name is specified.
+		Return the output of the permutation and testing algorithms as a Pandas DataFrame.  Write to a file if a file name is specified.
 		"""
 		if(writeToFile != None):
-			df = pd.DataFrame(self.output)
-			df.columns = ["matrix1", "matrix2", "dopant1", "dopant2", "dopant3", "dopant4", "d1pct", "d2pct", "d3pct", "d4pct"]
 			try:
-				df.to_csv(self.outputfile)
+				self.outputdf.to_csv(self.outputfile)
 				print("Output written to {} ({} lines)".format(self.outputfile, len(df)))
 			except Exception as e:
 				print("Error writing to {} ({})".format(self.outputfile, e))
 		
-		return self.output
+		return self.outputdf
 		
 		
 	def getData(self):
