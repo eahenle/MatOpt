@@ -330,7 +330,7 @@ class InkOpt():
 		if(writeToFile != None):
 			try:
 				self.outputdf.to_csv(self.outputfile)
-				print("Output written to {} ({} lines)".format(self.outputfile, len(outputdf)))
+				print("Output written to {} ({} lines)".format(self.outputfile, len(self.outputdf)))
 			except Exception as e:
 				print("Error writing to {} ({})".format(self.outputfile, e))
 		
