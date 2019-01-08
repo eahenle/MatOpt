@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 """
 InkOptConf.py
 Adrian Henle
