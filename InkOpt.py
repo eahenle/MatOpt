@@ -316,7 +316,7 @@ class InkOpt():
 			self.log.info("Writing output list to Pandas DataFrame")
 			from pathlib import Path # ## Put this where it belongs.
 			self.outputfile = self.outputfile if not Path(self.outputfile).is_file() else "output_{}.csv".format(time.time())
-			self.outputdf = pd.Dataframe(self.output)
+			self.outputdf = pd.DataFrame(self.output)
 			self.outputdf.columns = ["matrix1", "matrix2", "dopant1", "dopant2", "dopant3", "dopant4", "d1pct", "d2pct", "d3pct", "d4pct", "diffPdfs", "PDf", "Vgrin"]
 			
 			return self.outputdf

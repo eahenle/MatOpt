@@ -124,6 +124,8 @@ Version 10.19
 	Quit() needs some more intelligent message handling <br>
 	Quit() should be integrated into signal and error handlers program-wide
 	</li>
+	<li> Program launch has become VERY slow! ...this might be because of OneDrive moving files to non-local storage.</li>
+	<li> Under Windows, Tk renders a crisp sans-serif font.  Under Unix, it renders a blurry serif font. </li>
 </ul>
 <br>
 
