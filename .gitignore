@@ -2,7 +2,8 @@ output_*.*.csv
 *.pyc
 old/*
 __pycache__/*
-.t1
+Dev/*
 *.txt
 *.xlsx
 inkoptlog
+*.pyc
