@@ -198,5 +198,5 @@ class InkOptGUI:
 		message = tk.Message(AboutWindow, text = ABOUT)
 		message.pack()
 		self.log.info("About this software:\n{}".format(ABOUT))
-		closeButton = tk.Button(AboutWindow, text = "Close", command = AboutWindow.destroy)
+		closeButton = tk.Button(AboutWindow, text = "Close", command = tknode.destroy)
 		closeButton.pack()

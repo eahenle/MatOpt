@@ -92,16 +92,15 @@ Version 10.19
 </ul>
 <ul>
 <u> Priority 3 </u>
-	<li> InkOptConf.py: <br>
-	Split constants out to InkOptConf.csv <br>
-	General messiness of code.
-	</li>
 	<li> InkOpt_v10.py: No signal handling </li>
 	<li> InkOptParamWindow.py: <br>
 	List-type data in text fields has extra characters.
 	Structure is strongly hard-coded for current InkOpt data types.  Should be made more flexible.
 	</li>
-	<li> Closing windows doesn't kill tk.Toplevel objects, so re-clicking LAUNCH OPTIMIZER doesn't re-open closed windows. </li>
+	<li> Closing windows doesn't kill tk.Toplevel objects, so re-clicking LAUNCH OPTIMIZER doesn't re-open closed windows.<br>
+	Possible fix: re-factor button command to run pack() on window contents to render it up again.<br>
+	Other possible fix: (try first; are the windows' frames destroyed?) set event handlers on destruction of window frames for destruction of Toplevel parents.
+	</li>
 	<li> InkOpt_v10.py: <br> 
 	in interConsole, hacky <br>
 	in interConsole, output formatting issue
@@ -112,7 +111,6 @@ Version 10.19
 	MainWindow() should be chunked up <br>
 	Check out the return situation on LoadDataWindow() and LoadPermuteWindow() <br>
 	Run() logic can be functionalized <br>
-	about() is glitchy--close button doesn't work right.
 	</li>
 	<li> Creation of connected tk.StringVar and tk.Entry objects should be handled by a helper function. </li>
 	<li> runkInkOpt.bat: <br>
