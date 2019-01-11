@@ -77,6 +77,13 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].
 Version 10.19
 
 <u> Bugs by Priority </u>
+<ol>
+<u> Priority 0 </u>
+<li> Fix/implement GUI parameter and data editing </li>
+<li> Add remaining variables to GUI and config file </li>
+<li> Add row labels and calculated data to permutation outputs </li>
+<li> Build distributibles for Mac and Windows </li>
+</ol>
 <ul>
 <u> Priority 1 </u>
 	<li> Algorithm has not been validated against previous full implementation! <br>

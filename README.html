@@ -79,44 +79,47 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].</p>
 <p><strong> Development </strong></p>
 <p>Version 10.19</p>
 <p><u> Bugs by Priority </u></p>
+<ol>
+<u> Priority 0 </u>
+<li> Fix/implement GUI parameter and data editing </li>
+<li> Add remaining variables to GUI and config file </li>
+<li> Add row labels and calculated data to permutation outputs </li>
+<li> Build distributibles for Mac and Windows </li>
+</ol>
 <ul>
 <u> Priority 1 </u>
-	<li> Algorithm has not been validated against previous full implementation! </li>
-	<li> Permutation window GO button needs to trigger update of InkOpt data and parameters before running permutations. </li>
+	<li> Algorithm has not been validated against previous full implementation! <br>
+	Run v7 algorithm original implementation on inputs designed to take 2-5 minutes to complete.  Run v7 algorithm new
+	implementation on same material data and input parameters, with sampling density chosen to match the number of samples
+	between implementations.  3 input sets.  Time each run; calculate average permutations tested per minute, and verify that
+	similar results are obtained.
+	</li>
 </ul>
 <ul>
 <u> Priority 2 </u>
-	<li> Closing windows doesn't kill tk.Toplevel objects </li>
+	<li> Permutation window GO button needs to trigger update of InkOpt data and parameters before running permutations. </li>
+</ul>
+<ul>
+<u> Priority 3 </u>
 	<li> InkOpt_v10.py: No signal handling </li>
-	<li> InkOptConf.py: <br>
-	Split constants out to InkOptConf.csv <br>
-	General messiness of code.
-	</li>
-	<li> InkOpt.py: <br>
-	InkOpt.output should be transformed to a pd.Dataframe after an algorithm is run <br>
-	InkOpt.writeOutput should avoid overwriting files
-	</li>
 	<li> InkOptParamWindow.py: <br>
 	List-type data in text fields has extra characters.
 	Structure is strongly hard-coded for current InkOpt data types.  Should be made more flexible.
 	</li>
-	<li> ASCII logo renders poorly under Windows.  Replace with image rendering for all versions. </li>
-</ul>
-<ul>
-<u> Priority 3 </u>
+	<li> Closing windows doesn't kill tk.Toplevel objects, so re-clicking LAUNCH OPTIMIZER doesn't re-open closed windows.<br>
+	Possible fix: re-factor button command to run pack() on window contents to render it up again.<br>
+	Other possible fix: (try first; are the windows' frames destroyed?) set event handlers on destruction of window frames for destruction of Toplevel parents.
+	</li>
 	<li> InkOpt_v10.py: <br> 
 	in interConsole, hacky <br>
-	in interConsole, output formatting issue <br>
-	
+	in interConsole, output formatting issue
 	</li>
-	<li> Upgrade all .txt and .csv operations to .xlsx </li>
 	<li> Overuse of "self." and excessive object name chaining thoughout the code </li>
 	<li> Large-scale try/except/finally block encapsulation for most robust/stable program </li>
 	<li> InkOptGUI.py: <br>
 	MainWindow() should be chunked up <br>
 	Check out the return situation on LoadDataWindow() and LoadPermuteWindow() <br>
 	Run() logic can be functionalized <br>
-	about() is glitchy--close button doesn't work right.
 	</li>
 	<li> Creation of connected tk.StringVar and tk.Entry objects should be handled by a helper function. </li>
 	<li> runkInkOpt.bat: <br>
@@ -128,12 +131,14 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].</p>
 	Quit() needs some more intelligent message handling <br>
 	Quit() should be integrated into signal and error handlers program-wide
 	</li>
+	<li> Program launch has become VERY slow! ...this might be because of OneDrive moving files to non-local storage.</li>
+	<li> Under Windows, Tk renders a crisp sans-serif font.  Under Unix, it renders a blurry serif font. </li>
 </ul>
 <br>
 <p><u> Future Features by Priority </u></p>
 <ul>
 	<u> Priority 1 </u>
-	
+	<li> Upgrade all .txt and .csv operations to .xlsx </li>
 	<li> Parallelization (Priority. Do with the threading package, 'cause at least I know it's compatible with logging) </li>
 	<li> More controls on the Permute Window (e.g. sampling density), and better status output </li>
 	<li> Background processing (safe UI exit w/ background conclusion of data task) </li>
@@ -163,6 +168,7 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].</p>
 	<li> Android and iOS app integration ('cause... ok, no, probably not) </li>
 	<li> Config file specification of InkOpt variables and GUI configurations </li>
 	<li> GUI input parameter validation update to non-crashing version </li>
+	<li> Optimize library imports to avoid memory bloat and long load time (only import what you need) </li>
 </ul>
 <br>
 <p><u>Curiosities (Not Necessarily Related)</u></p>
@@ -170,6 +176,9 @@ Lists are space-delimited.  Volume % inputs in range [0, 100].</p>
 	<li> Write a lambda to leave something alone unless it's None; if None, set to a new value </li>
 	<li> Use try/except on only the definition expression of a function (flexible function defs) </li>
 	<li> What is the power of the "with" keyword? </li>
+	<li> Compile as much of the code as possible to .pyc bytecode for shorter startup time (plus some anti-human-eye obfuscation) </li>
+	<li> .pyw files execute headlessly with pythonw
+	<li> What's the point of .pyd? </li>
 </ul>
 <br>
 <br>
