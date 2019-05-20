@@ -7,3 +7,6 @@ Dev/*
 *.xlsx
 inkoptlog
 *.pyc
+build/*
+dist/*
+*.spec
