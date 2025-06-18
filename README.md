@@ -1,18 +1,12 @@
 <center>
 <img src = logo.png></img>
-<h1>InkOpt version 10</h1>
+<h1>MatOpt version 10</h1>
 
-<h4><i>Written by Adrian Henle, based on InkOpt_lite_inter_v7.py</i></h4>
-
-<h3>CONFIDENTIAL PROPERTY OF VOXTEL, INC.</h3>
-
-************************ A program to generate ink formulations. ************************</center>
+************************ A program to generate additive manufacturing ink formulations. ************************</center>
 
 <strong> Description </strong><br>
-Each formulation is based on inputs of two lists of matrices and two lists of dopants.  Potential
-formulations are probed for calculated parameters relevant to GRIN optics, and material
-combinations with acceptable values are returned to the user in CSV format for viewing in
-spreadsheet software.
+Each formulation is based on inputs of two lists of matrices and two lists of dopants.
+Potential formulations are probed for calculated parameters relevant to GRIN optics, and material combinations with acceptable values are returned to the user in CSV format for viewing in spreadsheet software.
 
 <strong> Program Usage </strong><br>
 To open on the command line, use one of these:
